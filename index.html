@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản Đồ Trực Quan 7 Khách Sạn Đà Nẵng &amp; Google Street View</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0284c7; --primary-dark: #0369a1; --bg-glass: rgba(255,255,255,0.96); --dark-text: #0f172a; --shadow: 0 12px 30px rgba(0,0,0,0.15); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Plus Jakarta Sans", sans-serif; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #f8fafc; }
+        #app { display: flex; width: 100vw; height: 100vh; position: relative; }
+        #sidebar { width: 440px; height: 100%; background: var(--bg-glass); backdrop-filter: blur(14px); box-shadow: var(--shadow); z-index: 1000; display: flex; flex-direction: column; }
+        .header-panel { padding: 20px 24px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .header-panel h1 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+        .header-panel p { font-size: 0.82rem; opacity: 0.92; line-height: 1.4; }
+        .controls { padding: 12px 16px; display: flex; gap: 8px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .btn { flex: 1; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease; background: white; color: #334155; }
+        .btn-primary { background: var(--primary); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-active { background: #059669 !important; color: white !important; border: none !important; box-shadow: 0 0 12px rgba(5,150,105,0.4); }
+        .hotel-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+        .hotel-card { display: flex; gap: 12px; background: white; padding: 12px; border-radius: 14px; border: 1.5px solid #e2e8f0; cursor: pointer; transition: all 0.2s ease; }
+        .hotel-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .hotel-card.selected { border-color: var(--primary); background: #f0f9ff; box-shadow: 0 0 0 2px rgba(2,132,199,0.2); }
+        .hotel-card-img-wrapper { position: relative; width: 96px; height: 96px; flex-shrink: 0; border-radius: 10px; overflow: hidden; background: #e2e8f0; }
+        .hotel-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .hotel-card:hover img { transform: scale(1.06); }
+        .hotel-card-img-badge { position: absolute; top: 4px; left: 4px; background: rgba(15,23,42,0.85); color: #fef08a; font-size: 0.65rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; }
+        .hotel-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+        .hotel-info h3 { font-size: 0.88rem; font-weight: 700; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .price-tag { color: #e11d48; font-weight: 800; font-size: 0.85rem; margin: 3px 0; }
+        .badges { display: flex; gap: 4px; flex-wrap: wrap; }
+        .badge { font-size: 0.68rem; padding: 2px 7px; border-radius: 6px; background: #f0f9ff; color: #0369a1; font-weight: 600; border: 1px solid #bae6fd; white-space: nowrap; }
+        #map-container { flex: 1; height: 100%; position: relative; }
+        #map { width: 100%; height: 100%; }
+        .custom-hotel-marker { position: relative; width: 52px; height: 52px; border-radius: 50%; border: 3px solid white; box-shadow: 0 6px 18px rgba(0,0,0,0.35); background-size: cover; background-position: center; cursor: pointer; transition: all 0.2s ease; }
+        .custom-hotel-marker:hover { transform: scale(1.22); z-index: 9999 !important; border-color: #38bdf8; box-shadow: 0 8px 24px rgba(2,132,199,0.45); }
+        .marker-price-badge { position: absolute; bottom: -13px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #38bdf8; font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.35); border: 1px solid #334155; }
+        .leaflet-popup-content-wrapper { border-radius: 18px; padding: 0; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); background: white; }
+        .leaflet-popup-content { margin: 0 !important; width: 330px !important; }
+        .carousel-container { position: relative; width: 100%; height: 180px; overflow: hidden; background: #0f172a; }
+        .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; animation: fadeIn 0.45s ease; }
+        .carousel-slide.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0.3; } to { opacity: 1; } }
+        .photo-nav-bar { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; z-index: 10; }
+        .photo-counter { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: white; font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+        .photo-dots { display: flex; gap: 5px; background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 12px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s ease; }
+        .dot.active { background: #38bdf8; transform: scale(1.35); }
+        .popup-body { padding: 14px 16px; }
+        .popup-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; gap: 8px; }
+        .popup-title-row h4 { font-size: 0.97rem; font-weight: 800; color: var(--dark-text); line-height: 1.25; }
+        .rating-badge { background: #fef3c7; color: #d97706; font-weight: 800; font-size: 0.74rem; padding: 3px 7px; border-radius: 6px; display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+        .location-info { font-size: 0.77rem; color: #475569; margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
+        .amenities-section { margin: 8px 0; padding-top: 8px; border-top: 1px dashed #e2e8f0; }
+        .amenities-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .amenities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
+        .amenity-item { font-size: 0.72rem; color: #334155; display: flex; align-items: center; gap: 5px; background: #f8fafc; padding: 4px 7px; border-radius: 6px; border: 1px solid #f1f5f9; }
+        .amenity-item i { color: var(--primary); font-size: 0.76rem; width: 14px; text-align: center; }
+        .meta-info-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; background: #f1f5f9; padding: 7px 10px; border-radius: 10px; margin-top: 8px; font-size: 0.72rem; color: #475569; }
+        .popup-action-buttons { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+        .streetview-btn { width: 100%; padding: 9px 12px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(14,165,233,0.3); transition: all 0.2s ease; }
+        .streetview-btn:hover { opacity: 0.95; transform: translateY(-1px); }
+        .secondary-links-row { display: flex; gap: 6px; }
+        .sec-link-btn { flex: 1; padding: 6px 8px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; border: 1px solid #cbd5e1; background: white; color: #334155; transition: all 0.2s ease; }
+        .sec-link-btn:hover { background: #f1f5f9; border-color: var(--primary); color: var(--primary); }
+        #sv-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.97); z-index: 99999; display: none; flex-direction: column; }
+        #sv-modal.active { display: flex; }
+        .sv-header { padding: 12px 20px; background: #0f172a; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; gap: 12px; flex-wrap: wrap; }
+        .sv-header h3 { font-size: 1rem; display: flex; align-items: center; gap: 10px; }
+        .sv-header-actions { display: flex; align-items: center; gap: 8px; }
+        .sv-action-btn { background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 11px; border-radius: 8px; font-weight: 700; font-size: 0.76rem; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: all 0.2s ease; }
+        .sv-action-btn:hover { background: #334155; color: white; }
+        .sv-close-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.76rem; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .sv-close-btn:hover { background: #dc2626; }
+        #sv-iframe { width: 100%; flex: 1; border: none; }
+        @media(max-width: 768px) { #app { flex-direction: column-reverse; } #sidebar { width: 100%; height: 45vh; } #map-container { height: 55vh; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="sidebar">
+        <div class="header-panel">
+            <h1><i class="fa-solid fa-map-location-dot"></i> Đà Nẵng Hotels 2D</h1>
+            <p>Bản đồ trực quan 7 Khách sạn, Ảnh thật 100% &amp; Google Street View</p>
+        </div>
+        <div class="controls">
+            <button id="btn-route" class="btn btn-primary" onclick="toggleRoute()">
+                <i class="fa-solid fa-route"></i> Tuyến Đường (7 KS)
+            </button>
+            <button id="btn-fit" class="btn" onclick="fitAllMarkers()">
+                <i class="fa-solid fa-expand"></i> Bao Quát
+            </button>
+        </div>
+        <div id="hotel-list-container" class="hotel-list"></div>
+    </div>
+    <div id="map-container"><div id="map"></div></div>
+</div>
+
+<div id="sv-modal">
+    <div class="sv-header">
+        <h3 id="sv-title"><i class="fa-solid fa-street-view" style="color:#38bdf8;"></i> Chế Độ Xem Phố (Google Street View)</h3>
+        <div class="sv-header-actions">
+            <a id="sv-full-btn" href="#" target="_blank" class="sv-action-btn"><i class="fa-solid fa-up-right-from-square"></i> Mở Google Maps 360°</a>
+            <a id="sv-agoda-btn" href="#" target="_blank" class="sv-action-btn"><i class="fa-solid fa-hotel"></i> Xem trên Agoda</a>
+            <button class="sv-close-btn" onclick="closeStreetViewModal()"><i class="fa-solid fa-xmark"></i> Đóng &amp; Quay Lại</button>
+        </div>
+    </div>
+    <iframe id="sv-iframe" src="" allowfullscreen loading="lazy"></iframe>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const hotels = [
+  {
+    "id": "nalod",
+    "name": "NALOD Đà Nẵng Hotel",
+    "stars": 5,
+    "rating": "4.8",
+    "price": "2.200.000 - 4.500.000đ",
+    "priceTag": "2.2Tr - 4.5Tr",
+    "lat": 16.0721006,
+    "lng": 108.2446562,
+    "latStr": 16.0722255,
+    "lngStr": 108.2450557,
+    "svHeading": 270,
+    "svHeadingStr": 240,
+    "address": "192 Võ Nguyên Giáp, Phường Phước Mỹ, Q. Sơn Trà, TP. Đà Nẵng",
+    "beachDist": "~50m (Mặt biển Mỹ Khê)",
+    "phone": "0236 3913 999",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/YqZcjjvpuQ1yE8uw9",
+    "agodaUrl": "https://www.agoda.com/vi-vn/the-nalod-da-nang/hotel/da-nang-vn.html",
+    "images": [
+      "https://nalod.com.vn/uploads/gallery/slider-front-view-1760406162.webp",
+      "https://nalod.com.vn/uploads/gallery/slider-front-view-2-1760409823.webp",
+      "https://nalod.com.vn/uploads/gallery/slider-buffet-phao-hoa-1784272213.webp",
+      "https://nalod.com.vn/uploads/product/avt-room-m-superior-ocean-room-1760417044.png",
+      "https://nalod.com.vn/uploads/gallery/slider-spa-offer-1775553890.webp"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-person-swimming",
+        "text": "Hồ bơi vô cực ngắm biển"
+      },
+      {
+        "icon": "fa-spa",
+        "text": "Sen Spa & Thảo dược"
+      },
+      {
+        "icon": "fa-utensils",
+        "text": "Nhà hàng Ocean & Cá Chìà Vôi"
+      },
+      {
+        "icon": "fa-dumbbell",
+        "text": "Phòng Gym & Fitness"
+      },
+      {
+        "icon": "fa-cocktail",
+        "text": "Ocean Rooftop Bar"
+      },
+      {
+        "icon": "fa-champagne-glasses",
+        "text": "Trung tâm Hội nghị 8 sảnh"
+      }
+    ]
+  },
+  {
+    "id": "paracel",
+    "name": "Paracel Beach Hotel",
+    "stars": 4,
+    "rating": "4.6",
+    "price": "1.300.000 - 2.800.000đ",
+    "priceTag": "1.3Tr - 2.8Tr",
+    "lat": 16.0684659,
+    "lng": 108.2449142,
+    "latStr": 16.0684526,
+    "lngStr": 108.2451761,
+    "svHeading": 270,
+    "svHeadingStr": 260,
+    "address": "204 Võ Nguyên Giáp, Phường Phước Mỹ, Q. Sơn Trà, TP. Đà Nẵng",
+    "beachDist": "~50m (Mặt biển Mỹ Khê)",
+    "phone": "0236 3966 789",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/MtpKUjwRmzWao5CV7",
+    "agodaUrl": "https://www.agoda.com/vi-vn/paracel-danang-hotel_3/hotel/da-nang-vn.html",
+    "images": [
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/1.-Lobby.webp",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/03/TWIN-3-1.webp",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/DOUBLE-5.webp",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/RES-6-scaled.jpg",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/04/DSC04374-Edit.webp"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-crown",
+        "text": "Nội thất mạ vàng 24K"
+      },
+      {
+        "icon": "fa-person-swimming",
+        "text": "Hồ bơi ngoài trời tầng 19"
+      },
+      {
+        "icon": "fa-spa",
+        "text": "Massage VIP & Xông hơi"
+      },
+      {
+        "icon": "fa-utensils",
+        "text": "Paracel Venice Restaurant"
+      },
+      {
+        "icon": "fa-mug-saucer",
+        "text": "Kopi Lounge & Bar"
+      },
+      {
+        "icon": "fa-hotel",
+        "text": "Phòng Hội nghị 200+ khách"
+      }
+    ]
+  },
+  {
+    "id": "muongthanh",
+    "name": "Mường Thanh Luxury Sông Hàn",
+    "stars": 5,
+    "rating": "4.7",
+    "price": "1.200.000 - 2.500.000đ",
+    "priceTag": "1.2Tr - 2.5Tr",
+    "lat": 16.0604467,
+    "lng": 108.2168196,
+    "latStr": 16.0606533,
+    "lngStr": 108.2168698,
+    "svHeading": 0,
+    "svHeadingStr": 230,
+    "address": "115 Nguyễn Văn Linh, Phường Nam Dương, Q. Hải Châu, TP. Đà Nẵng",
+    "beachDist": "~3.5 km (Trung tâm TP, gần Cầu Rồng)",
+    "phone": "0236 2223 888",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/HtQ1hnfCNwCkZ4m79",
+    "agodaUrl": "https://www.agoda.com/vi-vn/oneopera-danang-hotel/hotel/da-nang-vn.html",
+    "images": [
+      "https://bizweb.dktcdn.net/100/471/958/products/2-090591.jpg",
+      "https://cdn1.ivivu.com/images/2024/03/19/17/deluxe-king-3-cr_eokt6f_.webp",
+      "https://cdn1.ivivu.com/images/2024/03/19/17/president-4-cr_mibsws_.webp",
+      "https://bizweb.dktcdn.net/100/471/958/products/4a-0905340.jpg",
+      "https://cdn1.ivivu.com/images/2024/03/19/17/premier-deluxe-king-4-cr_bdsc4h_.webp"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-water-ladder",
+        "text": "Hồ bơi trong nhà lớn 390m²"
+      },
+      {
+        "icon": "fa-child",
+        "text": "Kid Club & Bảo mẫu"
+      },
+      {
+        "icon": "fa-microphone",
+        "text": "Karaoke VIP âm thanh chuẩn"
+      },
+      {
+        "icon": "fa-spa",
+        "text": "Trầm Hương Spa & Sauna"
+      },
+      {
+        "icon": "fa-plane-departure",
+        "text": "Cách sân bay 5 phút"
+      },
+      {
+        "icon": "fa-square-parking",
+        "text": "Bãi đỗ xe ô tô rộng rãi"
+      }
+    ]
+  },
+  {
+    "id": "nesta",
+    "name": "Nesta Danang Hotel",
+    "stars": 4,
+    "rating": "4.5",
+    "price": "1.000.000 - 2.000.000đ",
+    "priceTag": "1.0Tr - 2.0Tr",
+    "lat": 16.0541154,
+    "lng": 108.2470268,
+    "latStr": 16.0542506,
+    "lngStr": 108.2476729,
+    "svHeading": 260,
+    "svHeadingStr": 230,
+    "address": "268 Võ Nguyên Giáp, Phường Mỹ An, Q. Ngũ Hành Sơn, TP. Đà Nẵng",
+    "beachDist": "~150m (Bãi tắm Mỹ An, gần Phố Tây)",
+    "phone": "0236 3958 888",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/1WvZQQjEkvDPPyQS7",
+    "agodaUrl": "https://www.agoda.com/vi-vn/nesta-hotel-da-nang/hotel/da-nang-vn.html",
+    "images": [
+      "https://nestahotel.com.vn/wp-content/uploads/2026/02/DJI_0081-copy-2-1-1-1536x875.jpg",
+      "https://nestahotel.com.vn/wp-content/uploads/2026/02/DHP_4897-1.webp",
+      "https://nestahotel.com.vn/wp-content/uploads/2026/02/banner-1-1024x583.webp",
+      "https://nestahotel.com.vn/wp-content/uploads/2026/02/post-2-1-1536x875.jpg",
+      "https://nestahotel.com.vn/wp-content/uploads/2026/02/Nesta-valley-1024x576.jpg"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-tree",
+        "text": "Khuôn viên Sân vườn thoáng mát"
+      },
+      {
+        "icon": "fa-person-swimming",
+        "text": "Hồ bơi ngoài trời"
+      },
+      {
+        "icon": "fa-martini-glass",
+        "text": "Terrace Bar & Coffee"
+      },
+      {
+        "icon": "fa-utensils",
+        "text": "Nhà hàng ẩm thực Á - Âu"
+      },
+      {
+        "icon": "fa-shoe-prints",
+        "text": "Sát Phố Tây An Thượng"
+      },
+      {
+        "icon": "fa-bicycle",
+        "text": "Cho thuê xe đạp miễn phí"
+      }
+    ],
+    "panoId": "8zaQhxKga8JZp5LYKzDIgA"
+  },
+  {
+    "id": "sevensea",
+    "name": "7 Seven Sea Hotel",
+    "stars": 4,
+    "rating": "4.4",
+    "price": "900.000 - 1.800.000đ",
+    "priceTag": "900k - 1.8Tr",
+    "lat": 16.0753802,
+    "lng": 108.2448155,
+    "latStr": 16.0754736,
+    "lngStr": 108.2450704,
+    "svHeading": 260,
+    "svHeadingStr": 266,
+    "address": "150 Võ Nguyên Giáp, Phường Phước Mỹ, Q. Sơn Trà, TP. Đà Nẵng",
+    "beachDist": "~50m (Đối diện bãi Phạm Văn Đồng)",
+    "phone": "0236 3890 777",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/6mCxgKnsvrqfwaaR6",
+    "agodaUrl": "https://www.agoda.com/vi-vn/seven-sea-hotel-da-nang_4/hotel/da-nang-vn.html",
+    "images": [
+      "https://sevenseahotel.com/uploads/gal/tmp_1678848066.jpg",
+      "https://sevenseahotel.com/uploads/gal/tmp_1730428473.jpg",
+      "https://sevenseahotel.com/uploads/gal/tmp_1730429711.jpg",
+      "https://sevenseahotel.com/uploads/product/37.png",
+      "https://sevenseahotel.com/uploads/gal/tmp_1730429506.jpg"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-umbrella-beach",
+        "text": "Đối diện Bãi tắm Phạm Văn Đồng"
+      },
+      {
+        "icon": "fa-person-swimming",
+        "text": "Rooftop Infinity Pool"
+      },
+      {
+        "icon": "fa-wine-glass",
+        "text": "Sky Bar ngắm bán đảo Sơn Trà"
+      },
+      {
+        "icon": "fa-utensils",
+        "text": "Seven Restaurant Buffet"
+      },
+      {
+        "icon": "fa-dumbbell",
+        "text": "Phòng Gym & Thể hình"
+      },
+      {
+        "icon": "fa-car",
+        "text": "Valet Parking & Đưa đón sân bay"
+      }
+    ]
+  },
+  {
+    "id": "fivitel",
+    "name": "Fivitel Danang Hotel",
+    "stars": 4,
+    "rating": "4.6",
+    "price": "850.000 - 1.700.000đ",
+    "priceTag": "850k - 1.7Tr",
+    "lat": 16.057476,
+    "lng": 108.232501,
+    "latStr": 16.0520467,
+    "lngStr": 108.2330924,
+    "svHeading": 90,
+    "svHeadingStr": 255,
+    "address": "388 Trần Hưng Đạo, Phường An Hải Tây, Q. Sơn Trà, TP. Đà Nẵng",
+    "beachDist": "~2.5 km (Ven sông Hàn, ngắm Cầu Rồng)",
+    "phone": "0236 3555 688",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/UVpUTJ1Bq2g5GUz2A",
+    "agodaUrl": "https://www.agoda.com/vi-vn/fivitel-da-nang-hotel/hotel/da-nang-vn.html",
+    "images": [
+      "https://pix8.agoda.net/hotelImages/2915722/-1/76a5daeb13863b20a9446577139d92a8.jpg",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/be4b54132a25d4fb8f0b9833da2f4b3e.jpg",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/92a8f70c48975fb7aefb596fed7998d5.jpg",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/773404524011d7e3648ade7937e2026e.jpg",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/8899a98d758c837f3fbe6b3b989626bb.jpg"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-water-ladder",
+        "text": "Bể bơi vô cực dát vàng tầng mái"
+      },
+      {
+        "icon": "fa-bridge",
+        "text": "View trực diện Cầu Trần Thị Lý"
+      },
+      {
+        "icon": "fa-door-open",
+        "text": "100% phòng có ban công ngắm sông"
+      },
+      {
+        "icon": "fa-child-reaching",
+        "text": "CLB Trẻ em (Kid Club)"
+      },
+      {
+        "icon": "fa-spa",
+        "text": "Babylon Spa & Xông hơi"
+      },
+      {
+        "icon": "fa-bicycle",
+        "text": "Mượn xe đạp miễn phí"
+      }
+    ],
+    "panoId": "SvJTrQdLdrIeJaBgvLujaw"
+  },
+  {
+    "id": "minhtoan",
+    "name": "Minh Toàn Galaxy Hotel",
+    "stars": 4,
+    "rating": "4.5",
+    "price": "800.000 - 1.500.000đ",
+    "priceTag": "800k - 1.5Tr",
+    "lat": 16.0441656,
+    "lng": 108.2227215,
+    "latStr": 16.04436,
+    "lngStr": 108.2229144,
+    "svHeading": 90,
+    "svHeadingStr": 225,
+    "address": "306 Đường 2 Tháng 9, Phường Hòa Cường Bắc, Q. Hải Châu, TP. Đà Nẵng",
+    "beachDist": "~3.8 km (Trung tâm TP, gần Asia Park)",
+    "phone": "0236 3662 288",
+    "checkin": "14:00 / 12:00",
+    "mapUrl": "https://maps.app.goo.gl/HqUKKPqsmsqMRr479",
+    "agodaUrl": "https://www.agoda.com/vi-vn/minh-toan-galaxy-hotel-da-nang/hotel/da-nang-vn.html",
+    "images": [
+      "https://cdn1.ivivu.com/images/2024/10/23/14/dji_0011_kr4oey_wqhskd_.webp",
+      "https://pix8.agoda.net/property/625913/0/c5b9560b118c90da7c8d368791573a1a.jpeg",
+      "https://pix8.agoda.net/hotelImages/625913/-1/d46a0d81e87070e727d627b2f5bcb277.jpg",
+      "https://pix8.agoda.net/hotelImages/625913/-1/e8c61d8df34876ba58834d6ea414ef95.jpg",
+      "https://pix8.agoda.net/hotelImages/625913/-1/84f4aad1fe62314b8f139547cf9c6b87.jpg"
+    ],
+    "amenities": [
+      {
+        "icon": "fa-person-swimming",
+        "text": "Hồ bơi ngoài trời tầng thượng"
+      },
+      {
+        "icon": "fa-ferris-wheel",
+        "text": "Gần Asia Park & Sun Wheel"
+      },
+      {
+        "icon": "fa-wine-glass",
+        "text": "Moonlight Café & Bar"
+      },
+      {
+        "icon": "fa-handshake",
+        "text": "Trung tâm Hội nghị 5 sảnh lớn"
+      },
+      {
+        "icon": "fa-spa",
+        "text": "Spa, Sauna & Phòng Gym"
+      },
+      {
+        "icon": "fa-car-side",
+        "text": "Cho thuê xe du lịch tự lái"
+      }
+    ],
+    "panoId": "-5imGqc8S5rvEqp2Sk7OAw"
+  }
+];
+
+const activeCarouselIntervals = {};
+const map = L.map('map', { zoomControl: false }).setView([16.0600, 108.2350], 13);
+L.control.zoom({ position: 'topright' }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+L.polyline([[16.0850,108.2465],[16.0754,108.2460],[16.0684,108.2462],[16.0541,108.2480],[16.0400,108.2515]], { color:'#0284c7', weight:5, dashArray:'8,8', opacity:0.85 }).addTo(map);
+L.marker([16.0640, 108.2490], { icon: L.divIcon({ className:'beach-label', html:'<div style="background:#0284c7;color:white;padding:5px 12px;border-radius:12px;font-weight:800;font-size:11px;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.25);"><i class=\"fa-solid fa-umbrella-beach\"></i> BÃI BIỂN MỸ KHÊ ĐÀ NẴNG</div>' }) }).addTo(map);
+
+const markerGroup = L.featureGroup();
+const markersMap = {};
+const hotelListContainer = document.getElementById('hotel-list-container');
+
+hotels.forEach((hotel) => {
+    const mainImg = hotel.images[0];
+    const card = document.createElement('div');
+    card.className = 'hotel-card';
+    card.id = 'card-' + hotel.id;
+    card.onclick = () => focusHotel(hotel.id);
+    card.innerHTML = `
+        <div class="hotel-card-img-wrapper">
+            <img src="${mainImg}" alt="${hotel.name}" loading="lazy">
+            <span class="hotel-card-img-badge">${hotel.stars}★</span>
+        </div>
+        <div class="hotel-info">
+            <h3>${hotel.name}</h3>
+            <div class="price-tag">${hotel.price}</div>
+            <div class="badges">
+                <span class="badge"><i class="fa-solid fa-star" style="color:#f59e0b"></i> ${hotel.rating}</span>
+                <span class="badge"><i class="fa-solid fa-water"></i> ${hotel.beachDist}</span>
+            </div>
+        </div>`;
+    hotelListContainer.appendChild(card);
+
+    const customIcon = L.divIcon({
+        className: 'custom-pin-container',
+        html: `<div class="custom-hotel-marker" style="background-image:url('${mainImg}');"><div class="marker-price-badge">${hotel.priceTag}</div></div>`,
+        iconSize: [52, 52], iconAnchor: [26, 26]
+    });
+    const marker = L.marker([hotel.lat, hotel.lng], { icon: customIcon });
+    marker.bindPopup(createPopupHTML(hotel), { offset: [0, -12] });
+    marker.on('popupopen', () => { startCarousel(hotel.id, hotel.images.length); highlightSidebarCard(hotel.id); });
+    marker.on('popupclose', () => { stopCarousel(hotel.id); unhighlightSidebarCard(hotel.id); });
+    marker.on('mouseover', function() { this.openPopup(); });
+    marker.on('click', function() { map.flyTo([hotel.lat, hotel.lng], 16, { duration: 1.0 }); });
+    markersMap[hotel.id] = marker;
+    markerGroup.addLayer(marker);
+});
+markerGroup.addTo(map);
+
+function fitAllMarkers() { map.fitBounds(markerGroup.getBounds().pad(0.15)); }
+fitAllMarkers();
+
+function highlightSidebarCard(id) {
+    document.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('selected'));
+    const c = document.getElementById('card-' + id);
+    if (c) { c.classList.add('selected'); c.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+function unhighlightSidebarCard(id) { const c = document.getElementById('card-' + id); if(c) c.classList.remove('selected'); }
+function focusHotel(id) {
+    const h = hotels.find(x => x.id === id);
+    if (h) { map.flyTo([h.lat, h.lng], 16, { duration: 1.0 }); markersMap[id].openPopup(); highlightSidebarCard(id); }
+}
+
+function createPopupHTML(hotel) {
+    const slidesHTML = hotel.images.map((img, i) => `<img src="${img}" class="carousel-slide ${i===0?'active':''}" id="slide-${hotel.id}-${i}" alt="${hotel.name}" loading="lazy">`).join('');
+    const dotsHTML = hotel.images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${hotel.id}-${i}" onclick="manualSelectSlide('${hotel.id}',${i})"></div>`).join('');
+    const amenitiesHTML = hotel.amenities.map(a => `<div class="amenity-item"><i class="fa-solid ${a.icon}"></i><span>${a.text}</span></div>`).join('');
+    return `<div>
+        <div class="carousel-container">
+            ${slidesHTML}
+            <div class="photo-nav-bar">
+                <span class="photo-counter" id="counter-${hotel.id}">1 / ${hotel.images.length}</span>
+                <div class="photo-dots">${dotsHTML}</div>
+            </div>
+        </div>
+        <div class="popup-body">
+            <div class="popup-title-row">
+                <h4>${hotel.name}</h4>
+                <div class="rating-badge"><i class="fa-solid fa-star"></i> ${hotel.rating}★</div>
+            </div>
+            <div class="location-info"><i class="fa-solid fa-location-dot" style="color:#ef4444;flex-shrink:0;margin-top:2px;"></i><span>${hotel.address}</span></div>
+            <div style="font-size:0.77rem;font-weight:700;color:#0284c7;margin-bottom:6px;"><i class="fa-solid fa-water"></i> Cách biển: ${hotel.beachDist}</div>
+            <div class="amenities-section">
+                <div class="amenities-title">Tiện ích nổi trội</div>
+                <div class="amenities-grid">${amenitiesHTML}</div>
+            </div>
+            <div class="meta-info-grid">
+                <div><i class="fa-solid fa-phone" style="color:#0284c7;"></i> ${hotel.phone}</div>
+                <div><i class="fa-solid fa-clock" style="color:#0284c7;"></i> ${hotel.checkin}</div>
+            </div>
+            <div class="popup-action-buttons">
+                <button class="streetview-btn" onclick="openGoogleStreetView('${hotel.id}')"><i class="fa-solid fa-street-view"></i> Xem Chế Độ Xem Phố (Street View)</button>
+                <div class="secondary-links-row">
+                    <a href="${hotel.agodaUrl}" target="_blank" class="sec-link-btn"><i class="fa-solid fa-hotel" style="color:#e11d48;"></i> Agoda</a>
+                    <a href="${hotel.mapUrl}" target="_blank" class="sec-link-btn"><i class="fa-solid fa-map" style="color:#0284c7;"></i> Google Maps</a>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function startCarousel(hotelId, totalSlides) {
+    stopCarousel(hotelId);
+    let idx = 0;
+    activeCarouselIntervals[hotelId] = setInterval(() => { idx = (idx + 1) % totalSlides; showSlide(hotelId, idx, totalSlides); }, 3000);
+}
+function stopCarousel(hotelId) { if(activeCarouselIntervals[hotelId]) { clearInterval(activeCarouselIntervals[hotelId]); delete activeCarouselIntervals[hotelId]; } }
+function manualSelectSlide(hotelId, index) { const h = hotels.find(x => x.id===hotelId); if(!h) return; showSlide(hotelId,index,h.images.length); startCarousel(hotelId,h.images.length); }
+function showSlide(hotelId, slideIndex, totalSlides) {
+    for(let i=0;i<totalSlides;i++) {
+        const s = document.getElementById(`slide-${hotelId}-${i}`);
+        const d = document.getElementById(`dot-${hotelId}-${i}`);
+        if(s) s.classList.remove('active');
+        if(d) d.classList.remove('active');
+    }
+    const as = document.getElementById(`slide-${hotelId}-${slideIndex}`);
+    const ad = document.getElementById(`dot-${hotelId}-${slideIndex}`);
+    const ac = document.getElementById(`counter-${hotelId}`);
+    if(as) as.classList.add('active');
+    if(ad) ad.classList.add('active');
+    if(ac) ac.innerText = `${slideIndex+1} / ${totalSlides}`;
+}
+
+function openGoogleStreetView(hotelId) {
+    const h = hotels.find(x => x.id === hotelId);
+    if (!h) return;
+
+    // 1. Thêm tham số panoid cho Iframe Embed (nếu có panoId thì ưu tiên panoid thay vì cbll)
+    const embedLocation = h.panoId ? `panoid=${h.panoId}` : `cbll=${h.latStr},${h.lngStr}`;
+    document.getElementById('sv-iframe').src = `https://maps.google.com/maps?layer=c&${embedLocation}&cbp=11,${h.svHeadingStr},0,0,0&output=svembed`;
+
+    document.getElementById('sv-title').innerHTML = `<i class="fa-solid fa-street-view" style="color:#38bdf8;"></i> Xem Phố: <strong>${h.name}</strong>`;
+
+    // 2. Thêm &panoid=${h.panoId} vào link mở Maps đầy đủ
+    const fullPanoParam = h.panoId ? `&panoid=${h.panoId}` : '';
+    document.getElementById('sv-full-btn').href = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${h.latStr},${h.lngStr}&heading=${h.svHeadingStr}${fullPanoParam}`;
+
+    document.getElementById('sv-agoda-btn').href = h.agodaUrl;
+    document.getElementById('sv-modal').classList.add('active');
+}
+function closeStreetViewModal() { document.getElementById('sv-iframe').src = ''; document.getElementById('sv-modal').classList.remove('active'); }
+
+let routePolyline = null, isRouteActive = false;
+function toggleRoute() {
+    const btn = document.getElementById('btn-route');
+    if (isRouteActive) {
+        if (routePolyline) map.removeLayer(routePolyline);
+        btn.classList.remove('btn-active');
+        btn.innerHTML = '<i class="fa-solid fa-route"></i> Tuyến Đường (7 KS)';
+        isRouteActive = false;
+    } else {
+        const coords = [[16.0441656,108.2227215],[16.0604467,108.2168196],[16.057476,108.232501],[16.0541154,108.2470268],[16.0684659,108.2449142],[16.0721006,108.2446562],[16.0753802,108.2448155]];
+        routePolyline = L.polyline(coords, { color:'#ef4444', weight:5, opacity:0.88, lineCap:'round', dashArray:'4,8' }).addTo(map);
+        fitAllMarkers();
+        btn.classList.add('btn-active');
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Đang Hiện Đường (7 KS)';
+        isRouteActive = true;
+    }
+}
+</script>
+</body>
+</html>
