@@ -79,13 +79,11 @@
         .sv-close-btn:hover { background: #dc2626; }
         #sv-iframe { width: 100%; flex: 1; border: none; }
         @media(max-width: 768px) { #app { flex-direction: column-reverse; } #sidebar { width: 100%; height: 45vh; } #map-container { height: 55vh; } }
-        .author-credit { width: fit-content; margin-top: 12px; padding: 7px 11px; display: inline-flex; align-items: center; gap: 8px; color: white; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.24); border-radius: 999px; box-shadow: 0 6px 16px rgba(3,105,161,0.22); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 0.72rem; font-weight: 500; line-height: 1; letter-spacing: 0.01em; }
-        .author-credit i { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; color: #0369a1; background: white; border-radius: 50%; font-size: 0.68rem; box-shadow: 0 2px 8px rgba(15,23,42,0.16); }
-        .author-credit strong { font-weight: 800; position: relative; z-index: 1; }
-        .author-credit { position: relative; overflow: hidden; cursor: default; isolation: isolate; transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease; }
+        .author-credit { width: fit-content; margin-top: 12px; padding: 7px 11px; display: inline-flex; align-items: center; gap: 8px; color: white; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.24); border-radius: 999px; box-shadow: 0 6px 16px rgba(3,105,161,0.22); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 0.72rem; font-weight: 500; line-height: 1; letter-spacing: 0.01em; position: relative; overflow: hidden; cursor: default; isolation: isolate; transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease; }
         .author-credit::before { content: ""; position: absolute; inset: -60% auto -60% -45%; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.78), transparent); transform: skewX(-18deg) translateX(-220%); opacity: 0; pointer-events: none; z-index: 0; }
         .author-credit span { position: relative; z-index: 1; transition: letter-spacing 0.35s cubic-bezier(0.22,1,0.36,1), text-shadow 0.35s ease; }
-        .author-credit i { position: relative; z-index: 1; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), color 0.3s ease, box-shadow 0.3s ease; }
+        .author-credit i { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; color: #0369a1; background: white; border-radius: 50%; font-size: 0.68rem; box-shadow: 0 2px 8px rgba(15,23,42,0.16); position: relative; z-index: 1; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), color 0.3s ease, box-shadow 0.3s ease; }
+        .author-credit strong { font-weight: 800; position: relative; z-index: 1; }
         .author-credit:hover { transform: translateY(-3px) scale(1.035); background: rgba(255,255,255,0.23); border-color: rgba(255,255,255,0.52); box-shadow: 0 12px 26px rgba(3,105,161,0.34), 0 0 0 3px rgba(125,211,252,0.13); }
         .author-credit:hover::before { opacity: 1; animation: authorSheen 0.85s cubic-bezier(0.22,1,0.36,1); }
         .author-credit:hover i { transform: rotate(-10deg) scale(1.16); color: #0284c7; box-shadow: 0 4px 14px rgba(15,23,42,0.24), 0 0 0 5px rgba(255,255,255,0.12); }
@@ -208,6 +206,7 @@
             <p>Bản đồ trực quan 7 Khách sạn, Ảnh thật 100% &amp; Google Street View</p>
             <div class="author-credit" aria-label="Tác giả của trang web: Thai Phung">
                 <i class="fa-solid fa-wind" aria-hidden="true"></i>
+                 <!-- <i class="fa-solid fa-dragon" aria-hidden="true"></i> -->
                 <span>Team <strong>CDL Hồ Chí Minh</strong></span>
             </div>
         </div>
@@ -758,21 +757,47 @@ function openGoogleStreetView(hotelId) {
 }
 function closeStreetViewModal() { document.getElementById('sv-iframe').src = ''; document.getElementById('sv-modal').classList.remove('active'); }
 
-let routePolyline = null, isRouteActive = false;
-function toggleRoute() {
+let routePolyline = null, isRouteActive = false, isRouteLoading = false;
+async function toggleRoute() {
     const btn = document.getElementById('btn-route');
+    if (isRouteLoading) return;
     if (isRouteActive) {
-        if (routePolyline) map.removeLayer(routePolyline);
+        if (routePolyline) {
+            map.removeLayer(routePolyline);
+            routePolyline = null;
+        }
         btn.classList.remove('btn-active');
         btn.innerHTML = '<i class="fa-solid fa-route"></i> Tuyến Đường (7 KS)';
         isRouteActive = false;
-    } else {
-        const coords = [[16.0441656,108.2227215],[16.0604467,108.2168196],[16.057476,108.232501],[16.0541154,108.2470268],[16.0684659,108.2449142],[16.0721006,108.2446562],[16.0753802,108.2448155]];
-        routePolyline = L.polyline(coords, { color:'#ef4444', weight:5, opacity:0.88, lineCap:'round', dashArray:'4,8' }).addTo(map);
-        fitAllMarkers();
+        return;
+    }
+    const routeHotelIds = ['minhtoan', 'muongthanh', 'fivitel', 'nesta', 'paracel', 'nalod', 'sevensea'];
+    const routeHotels = routeHotelIds.map(id => hotels.find(hotel => hotel.id === id)).filter(Boolean);
+    const coordinates = routeHotels.map(hotel => `${hotel.lng},${hotel.lat}`).join(';');
+    const routeUrl = `https://router.project-osrm.org/route/v1/driving/${coordinates}?overview=full&geometries=geojson&steps=false`;
+    try {
+        isRouteLoading = true;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang tìm đường...';
+        const response = await fetch(routeUrl);
+        if (!response.ok) throw new Error(`OSRM HTTP ${response.status}`);
+        const data = await response.json();
+        if (data.code !== 'Ok' || !data.routes?.length) throw new Error(data.message || 'Không tìm thấy tuyến đường');
+        routePolyline = L.geoJSON(data.routes[0].geometry, { style: { color:'#ef4444', weight:6, opacity:0.9, lineCap:'round', lineJoin:'round' } }).addTo(map);
+        map.fitBounds(routePolyline.getBounds(), { padding: [40, 40] });
         btn.classList.add('btn-active');
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Đang Hiện Đường (7 KS)';
         isRouteActive = true;
+    } catch (error) {
+        console.error('Không thể tải tuyến đường:', error);
+        btn.classList.remove('btn-active');
+        btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Không Tìm Thấy Đường';
+        setTimeout(() => {
+            if (!isRouteActive) btn.innerHTML = '<i class="fa-solid fa-route"></i> Tuyến Đường (7 KS)';
+        }, 2500);
+    } finally {
+        isRouteLoading = false;
+        btn.disabled = false;
     }
 }
 </script>
