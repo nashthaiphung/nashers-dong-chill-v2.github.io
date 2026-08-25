@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bản Đồ Trực Quan 7 Khách Sạn Đà Nẵng &amp; Google Street View</title>
+    <title>Nasher Đồng Chill 2026 - Bản Đồ Trực Quan 7 Khách Sạn Đà Nẵng &amp; Google Street View</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Thai Phung - 2026 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -78,14 +79,137 @@
         .sv-close-btn:hover { background: #dc2626; }
         #sv-iframe { width: 100%; flex: 1; border: none; }
         @media(max-width: 768px) { #app { flex-direction: column-reverse; } #sidebar { width: 100%; height: 45vh; } #map-container { height: 55vh; } }
+        .author-credit { width: fit-content; margin-top: 12px; padding: 7px 11px; display: inline-flex; align-items: center; gap: 8px; color: white; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.24); border-radius: 999px; box-shadow: 0 6px 16px rgba(3,105,161,0.22); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 0.72rem; font-weight: 500; line-height: 1; letter-spacing: 0.01em; }
+        .author-credit i { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; color: #0369a1; background: white; border-radius: 50%; font-size: 0.68rem; box-shadow: 0 2px 8px rgba(15,23,42,0.16); }
+        .author-credit strong { font-weight: 800; position: relative; z-index: 1; }
+        .author-credit { position: relative; overflow: hidden; cursor: default; isolation: isolate; transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease; }
+        .author-credit::before { content: ""; position: absolute; inset: -60% auto -60% -45%; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.78), transparent); transform: skewX(-18deg) translateX(-220%); opacity: 0; pointer-events: none; z-index: 0; }
+        .author-credit span { position: relative; z-index: 1; transition: letter-spacing 0.35s cubic-bezier(0.22,1,0.36,1), text-shadow 0.35s ease; }
+        .author-credit i { position: relative; z-index: 1; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), color 0.3s ease, box-shadow 0.3s ease; }
+        .author-credit:hover { transform: translateY(-3px) scale(1.035); background: rgba(255,255,255,0.23); border-color: rgba(255,255,255,0.52); box-shadow: 0 12px 26px rgba(3,105,161,0.34), 0 0 0 3px rgba(125,211,252,0.13); }
+        .author-credit:hover::before { opacity: 1; animation: authorSheen 0.85s cubic-bezier(0.22,1,0.36,1); }
+        .author-credit:hover i { transform: rotate(-10deg) scale(1.16); color: #0284c7; box-shadow: 0 4px 14px rgba(15,23,42,0.24), 0 0 0 5px rgba(255,255,255,0.12); }
+        .author-credit:hover span { letter-spacing: 0.025em; text-shadow: 0 2px 10px rgba(15,23,42,0.2); }
+        @keyframes authorSheen { 0% { transform: skewX(-18deg) translateX(-220%); } 100% { transform: skewX(-18deg) translateX(620%); } }
+        @media (prefers-reduced-motion: reduce) { .author-credit, .author-credit i, .author-credit span { transition: none; } .author-credit:hover { transform: none; } .author-credit:hover::before { animation: none; opacity: 0; } }
+        /* =========================================
+          AUTHOR BADGE COMPONENT - THAI PHUNG
+          ========================================= */
+        .author-badge {
+            position: fixed;
+            bottom: 30px;
+            right: 24px;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 16px 8px 8px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #f8fafc;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        /* Hiệu ứng tia sáng lướt qua */
+        .author-badge::after {
+            content: '';
+            position: absolute;
+            top: 0; 
+            left: -150%; 
+            width: 50%; 
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+        }
+
+        /* Hiệu ứng khi Hover */
+        .author-badge:hover {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 12px 32px rgba(2, 132, 199, 0.35);
+            border-color: #38bdf8;
+            transform: translateY(-4px);
+            padding-right: 20px;
+        }
+
+        .author-badge:hover::after {
+            left: 200%;
+        }
+
+        .author-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* Xoay icon mượt mà */
+        .author-badge:hover .author-avatar {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .author-text {
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .author-name strong {
+            font-weight: 800;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        /* Chức danh ẩn, chỉ hiện ra khi hover */
+        .author-extra {
+            display: inline-block;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .author-badge:hover .author-extra {
+            max-width: 200px;
+            opacity: 1;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
 <div id="app">
     <div id="sidebar">
         <div class="header-panel">
-            <h1><i class="fa-solid fa-map-location-dot"></i> Đà Nẵng Hotels 2D</h1>
+            <h1><i class="fa-solid fa-map-location-dot" style="color: rgb(252, 252, 252);"></i> Nasher Đồng Chill 2026</h1>
             <p>Bản đồ trực quan 7 Khách sạn, Ảnh thật 100% &amp; Google Street View</p>
+            <div class="author-credit" aria-label="Tác giả của trang web: Thai Phung">
+                <i class="fa-solid fa-wind" aria-hidden="true"></i>
+                <span>Team <strong>CDL Hồ Chí Minh</strong></span>
+            </div>
         </div>
         <div class="controls">
             <button id="btn-route" class="btn btn-primary" onclick="toggleRoute()">
@@ -99,7 +223,7 @@
     </div>
     <div id="map-container"><div id="map"></div></div>
 </div>
-
+<!-- Thai Phung - 2026 -->
 <div id="sv-modal">
     <div class="sv-header">
         <h3 id="sv-title"><i class="fa-solid fa-street-view" style="color:#38bdf8;"></i> Chế Độ Xem Phố (Google Street View)</h3>
@@ -501,7 +625,7 @@ L.marker([16.0640, 108.2490], { icon: L.divIcon({ className:'beach-label', html:
 const markerGroup = L.featureGroup();
 const markersMap = {};
 const hotelListContainer = document.getElementById('hotel-list-container');
-
+// TP
 hotels.forEach((hotel) => {
     const mainImg = hotel.images[0];
     const card = document.createElement('div');
@@ -522,7 +646,7 @@ hotels.forEach((hotel) => {
             </div>
         </div>`;
     hotelListContainer.appendChild(card);
-
+        // Thai Phung
     const customIcon = L.divIcon({
         className: 'custom-pin-container',
         html: `<div class="custom-hotel-marker" style="background-image:url('${mainImg}');"><div class="marker-price-badge">${hotel.priceTag}</div></div>`,
@@ -542,6 +666,7 @@ markerGroup.addTo(map);
 function fitAllMarkers() { map.fitBounds(markerGroup.getBounds().pad(0.15)); }
 fitAllMarkers();
 
+//t-p
 function highlightSidebarCard(id) {
     document.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('selected'));
     const c = document.getElementById('card-' + id);
@@ -553,6 +678,7 @@ function focusHotel(id) {
     if (h) { map.flyTo([h.lat, h.lng], 16, { duration: 1.0 }); markersMap[id].openPopup(); highlightSidebarCard(id); }
 }
 
+// Phung Thai
 function createPopupHTML(hotel) {
     const slidesHTML = hotel.images.map((img, i) => `<img src="${img}" class="carousel-slide ${i===0?'active':''}" id="slide-${hotel.id}-${i}" alt="${hotel.name}" loading="lazy">`).join('');
     const dotsHTML = hotel.images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${hotel.id}-${i}" onclick="manualSelectSlide('${hotel.id}',${i})"></div>`).join('');
@@ -617,13 +743,13 @@ function openGoogleStreetView(hotelId) {
     const h = hotels.find(x => x.id === hotelId);
     if (!h) return;
 
-    // 1. Thêm tham số panoid cho Iframe Embed (nếu có panoId thì ưu tiên panoid thay vì cbll)
+    // 1. Thêm tham số panoid cho Iframe Embed (nếu có panoId thì ưu tiên panoid thay vì cbll) - TP
     const embedLocation = h.panoId ? `panoid=${h.panoId}` : `cbll=${h.latStr},${h.lngStr}`;
     document.getElementById('sv-iframe').src = `https://maps.google.com/maps?layer=c&${embedLocation}&cbp=11,${h.svHeadingStr},0,0,0&output=svembed`;
 
     document.getElementById('sv-title').innerHTML = `<i class="fa-solid fa-street-view" style="color:#38bdf8;"></i> Xem Phố: <strong>${h.name}</strong>`;
 
-    // 2. Thêm &panoid=${h.panoId} vào link mở Maps đầy đủ
+    // 2. Thêm &panoid=${h.panoId} vào link mở Maps đầy đủ. [ t-p)
     const fullPanoParam = h.panoId ? `&panoid=${h.panoId}` : '';
     document.getElementById('sv-full-btn').href = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${h.latStr},${h.lngStr}&heading=${h.svHeadingStr}${fullPanoParam}`;
 
@@ -650,5 +776,16 @@ function toggleRoute() {
     }
 }
 </script>
+<!-- AUTHOR BADGE COMPONENT -->
+<!-- Thai Phung - 2026 -->
+<div class="author-badge">
+    <div class="author-avatar">
+        <i class="fa-solid fa-code"></i>
+    </div>
+    <div class="author-text">
+        <span class="author-name">Created by <strong>Thai Phung</strong></span>
+        <span class="author-extra">• Nashtech 2026</span>
+    </div>
+</div>
 </body>
 </html>
