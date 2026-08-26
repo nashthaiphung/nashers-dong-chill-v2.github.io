@@ -889,36 +889,32 @@ async function toggleRoute() {
     </div>
 </div>
 <script>
-// CounterAPI: record every page load as a separate event, then read the total.
-(async function countEveryPageLoad() {
+// CounterAPI: increment one shared counter on every page load/reload.
+(async function countPageLoad() {
     const counterElement = document.getElementById('page-view-count');
     if (!counterElement) return;
 
     const namespace = 'nashthaiphung.github.io';
-    const action = 'nashers-dong-chill-v2-page-load';
-    const requestId = typeof crypto.randomUUID === 'function'
+    const action = 'page-load';
+    const key = 'nashers-dong-chill-v2';
+    const eventId = typeof crypto.randomUUID === 'function'
         ? crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const eventKey = `open-${requestId}`;
-    const cacheBuster = Date.now();
 
     try {
-        // A unique key makes this page load a distinct event, including reload/F5.
-        const incrementUrl = `https://counterapi.com/api/${encodeURIComponent(namespace)}/${encodeURIComponent(action)}/${encodeURIComponent(eventKey)}?_=${cacheBuster}`;
-        const incrementResponse = await fetch(incrementUrl, { cache: 'no-store' });
-        if (!incrementResponse.ok) throw new Error(`CounterAPI increment HTTP ${incrementResponse.status}`);
-        await incrementResponse.json();
+        const counterUrl = new URL(`https://counterapi.com/api/${namespace}/${action}/${key}`);
+        counterUrl.searchParams.set('userId', eventId);
+        counterUrl.searchParams.set('unique', 'false');
+        counterUrl.searchParams.set('_', Date.now().toString());
 
-        // "any" aggregates every unique page-load event under this action and is read-only.
-        const totalUrl = `https://counterapi.com/api/${encodeURIComponent(namespace)}/${encodeURIComponent(action)}/any?readOnly=true&_=${Date.now()}`;
-        const totalResponse = await fetch(totalUrl, { cache: 'no-store' });
-        if (!totalResponse.ok) throw new Error(`CounterAPI total HTTP ${totalResponse.status}`);
+        const response = await fetch(counterUrl.toString(), { cache: 'no-store' });
+        if (!response.ok) throw new Error(`CounterAPI HTTP ${response.status}`);
 
-        const totalData = await totalResponse.json();
-        const total = Number(totalData.value);
-        if (!Number.isFinite(total)) throw new Error('CounterAPI returned an invalid total');
+        const data = await response.json();
+        const count = Number(data.value);
+        if (!Number.isFinite(count)) throw new Error('CounterAPI returned an invalid value');
 
-        counterElement.textContent = total.toLocaleString('vi-VN');
+        counterElement.textContent = count.toLocaleString('vi-VN');
     } catch (error) {
         console.warn('Không thể cập nhật số lần mở trang:', error);
         counterElement.textContent = '—';
