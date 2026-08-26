@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasher Đồng Chill 2026 - Bản Đồ Trực Quan 7 Khách Sạn Đà Nẵng &amp; Google Street View</title>
+    <title>Nashers Đồng Chill 2026 - Bản Đồ Trực Quan 7 Khách Sạn Đà Nẵng &amp; Google Street View</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Thai Phung - 2026 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,6 +32,25 @@
         .hotel-card-img-badge { position: absolute; top: 4px; left: 4px; background: rgba(15,23,42,0.85); color: #fef08a; font-size: 0.65rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; }
         .hotel-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
         .hotel-info h3 { font-size: 0.88rem; font-weight: 700; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hotel-title-row { display: flex; align-items: center; gap: 7px; min-width: 0; }
+        .hotel-title-row h3 { flex: 1; min-width: 0; }
+        .hotel-quick-actions { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+        .hotel-action-btn { position: relative; width: 27px; height: 27px; padding: 0; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-size: 0.72rem; line-height: 1; transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease; isolation: isolate; }
+        .hotel-action-btn i { pointer-events: none; transform-origin: 50% 80%; }
+        .hotel-action-btn--street { color: white; border: 1px solid #0284c7; background: linear-gradient(135deg, #0ea5e9, #0284c7); box-shadow: 0 3px 8px rgba(2,132,199,0.2); }
+        .hotel-action-btn--map { color: #0284c7; border: 1px solid #bae6fd; background: #f0f9ff; box-shadow: 0 3px 8px rgba(2,132,199,0.08); }
+        .hotel-action-btn::before { content: ""; position: absolute; inset: -3px; border-radius: 10px; border: 1px solid rgba(56,189,248,0); transition: border-color 0.22s ease, transform 0.22s ease; z-index: -1; }
+        .hotel-action-btn::after { content: attr(data-tooltip); position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; padding: 5px 8px; border-radius: 7px; color: white; background: #0f172a; box-shadow: 0 8px 18px rgba(15,23,42,0.22); font-size: 0.64rem; font-weight: 700; line-height: 1; white-space: nowrap; opacity: 0; visibility: hidden; transform: translateY(-4px) scale(0.96); transform-origin: top right; pointer-events: none; transition: opacity 0.16s ease, visibility 0.16s ease, transform 0.16s ease; }
+        .hotel-action-btn:hover, .hotel-action-btn:focus-visible { transform: translateY(-2px) scale(1.07); outline: none; box-shadow: 0 7px 15px rgba(2,132,199,0.28), 0 0 0 3px rgba(56,189,248,0.13); }
+        .hotel-action-btn:hover::before, .hotel-action-btn:focus-visible::before { border-color: rgba(56,189,248,0.38); transform: scale(1.04); }
+        .hotel-action-btn:hover::after, .hotel-action-btn:focus-visible::after { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .hotel-action-btn--street:hover, .hotel-action-btn--street:focus-visible { background: linear-gradient(135deg, #38bdf8, #0369a1); }
+        .hotel-action-btn--map:hover, .hotel-action-btn--map:focus-visible { color: #0369a1; background: white; border-color: #7dd3fc; }
+        .hotel-card:hover .hotel-action-btn--street i { animation: actionAttentionStreet 0.68s cubic-bezier(0.36,0.07,0.19,0.97) both; }
+        .hotel-card:hover .hotel-action-btn--map i { animation: actionAttentionMap 0.72s 0.09s cubic-bezier(0.34,1.56,0.64,1) both; }
+        .hotel-card:hover .hotel-action-btn { box-shadow: 0 6px 14px rgba(2,132,199,0.2), 0 0 0 2px rgba(56,189,248,0.1); }
+        @keyframes actionAttentionStreet { 0%,100% { transform: rotate(0deg) scale(1); } 18% { transform: rotate(-13deg) scale(1.12); } 36% { transform: rotate(11deg) scale(1.12); } 54% { transform: rotate(-8deg) scale(1.08); } 72% { transform: rotate(5deg) scale(1.04); } }
+        @keyframes actionAttentionMap { 0% { transform: translateY(0) rotate(0deg) scale(1); } 35% { transform: translateY(-2px) rotate(9deg) scale(1.14); } 65% { transform: translateY(0) rotate(-6deg) scale(1.08); } 100% { transform: translateY(0) rotate(0deg) scale(1); } }
         .price-tag { color: #e11d48; font-weight: 800; font-size: 0.85rem; margin: 3px 0; }
         .review-tagline { margin: 3px 0; padding: 5px 8px; display: flex; align-items: flex-start; gap: 6px; color: #334155; background: linear-gradient(135deg, #f0f9ff, #f8fafc); border: 1px solid #bae6fd; border-left: 3px solid var(--primary); border-radius: 8px; font-size: 0.66rem; font-weight: 600; line-height: 1.35; }
         .review-tagline i { color: var(--primary); font-size: 0.68rem; margin-top: 2px; flex-shrink: 0; }
@@ -92,7 +111,7 @@
         .author-credit:hover i { transform: rotate(-10deg) scale(1.16); color: #0284c7; box-shadow: 0 4px 14px rgba(15,23,42,0.24), 0 0 0 5px rgba(255,255,255,0.12); }
         .author-credit:hover span { letter-spacing: 0.025em; text-shadow: 0 2px 10px rgba(15,23,42,0.2); }
         @keyframes authorSheen { 0% { transform: skewX(-18deg) translateX(-220%); } 100% { transform: skewX(-18deg) translateX(620%); } }
-        @media (prefers-reduced-motion: reduce) { .author-credit, .author-credit i, .author-credit span { transition: none; } .author-credit:hover { transform: none; } .author-credit:hover::before { animation: none; opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .author-credit, .author-credit i, .author-credit span { transition: none; } .author-credit:hover { transform: none; } .author-credit:hover::before { animation: none; opacity: 0; } .hotel-action-btn, .hotel-action-btn::before, .hotel-action-btn::after { transition: none; } .hotel-card:hover .hotel-action-btn i { animation: none; } }
         /* =========================================
           AUTHOR BADGE COMPONENT - THAI PHUNG
           ========================================= */
@@ -205,7 +224,7 @@
 <div id="app">
     <div id="sidebar">
         <div class="header-panel">
-            <h1><i class="fa-solid fa-map-location-dot" style="color: rgb(252, 252, 252);"></i> Nasher Đồng Chill 2026</h1>
+            <h1><i class="fa-solid fa-map-location-dot" style="color: rgb(252, 252, 252);"></i> Nashers Đồng Chill 2026</h1>
             <p>Bản đồ trực quan 7 Khách sạn, Ảnh thật 100% &amp; Google Street View</p>
             <div class="author-credit" aria-label="Tác giả của trang web: Thai Phung">
                 <i class="fa-solid fa-wind" aria-hidden="true"></i>
@@ -265,9 +284,11 @@ const hotels = [
     "images": [
       "https://nalod.com.vn/uploads/gallery/slider-front-view-1760406162.webp",
       "https://nalod.com.vn/uploads/gallery/slider-front-view-2-1760409823.webp",
-      "https://nalod.com.vn/uploads/gallery/slider-buffet-phao-hoa-1784272213.webp",
+      "https://pix8.agoda.net/hotelImages/2191467/0/92ae5eb408cf7ce1e49a7066976feaca.jpg?ce=2&s=1024x",
       "https://nalod.com.vn/uploads/product/avt-room-m-superior-ocean-room-1760417044.png",
-      "https://nalod.com.vn/uploads/gallery/slider-spa-offer-1775553890.webp"
+      "https://pix8.agoda.net/hotelImages/2191467/0/28d2a9bf190222c960ff827466773f20.jpg?ce=2&s=1024x",
+      "https://pix8.agoda.net/hotelImages/2191467/-1/e5eaed5e5a545fe7c6ef0f8794aab858.jpg?ca=7&ce=1&s=1024x",
+      "https://pix8.agoda.net/property/2191467/0/3082f7607e5057caccf2383eab336fb2.jpeg?ce=3&s=1024x"
     ],
     "amenities": [
       {
@@ -317,12 +338,15 @@ const hotels = [
     "checkin": "14:00 / 12:00",
     "mapUrl": "https://maps.app.goo.gl/MtpKUjwRmzWao5CV7",
     "agodaUrl": "https://www.agoda.com/vi-vn/paracel-danang-hotel_3/hotel/da-nang-vn.html",
-    "images": [
-      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/1.-Lobby.webp",
-      "https://paracelbeachhotel.com/wp-content/uploads/2024/03/TWIN-3-1.webp",
-      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/DOUBLE-5.webp",
+    "images": [      
       "https://paracelbeachhotel.com/wp-content/uploads/2024/02/RES-6-scaled.jpg",
-      "https://paracelbeachhotel.com/wp-content/uploads/2024/04/DSC04374-Edit.webp"
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/1.-Lobby.webp",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/Outside-4-scaled.jpg",
+      "https://pix8.agoda.net/property/76998306/0/1c066825046a195fd8a14488822ac831.jpeg?ce=3&s=1024x",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/03/TWIN-3-1.webp",
+      "https://paracelbeachhotel.com/wp-content/uploads/2024/02/DOUBLE-5.webp",      
+      "https://pix8.agoda.net/property/76998306/0/3a782d5e6d1a60bcc271070b26a6ab4a.jpeg?ce=3&s=1024x",
+      "https://pix8.agoda.net/property/76998306/0/5fe156dd284d414ff970abeb6f67f1fe.jpeg?ce=2&s=1024x"
     ],
     "amenities": [
       {
@@ -372,10 +396,12 @@ const hotels = [
     "checkin": "14:00 / 12:00",
     "mapUrl": "https://maps.app.goo.gl/HtQ1hnfCNwCkZ4m79",
     "agodaUrl": "https://www.agoda.com/vi-vn/oneopera-danang-hotel/hotel/da-nang-vn.html",
-    "images": [
+    "images": [      
       "https://bizweb.dktcdn.net/100/471/958/products/2-090591.jpg",
+      "https://pix8.agoda.net/property/76996523/0/10c393b8bd93f99522741ee5dab741ec.jpeg",
+      "https://pix8.agoda.net/hotelImages/149036/-1/f0ae560a395181256aa948934a35f47d.jpg?ca=9&ce=1&s=1024x",
       "https://cdn1.ivivu.com/images/2024/03/19/17/deluxe-king-3-cr_eokt6f_.webp",
-      "https://cdn1.ivivu.com/images/2024/03/19/17/president-4-cr_mibsws_.webp",
+      "https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/197003421.jpg?k=a167da4913c2325dd9f2c34790a6b38fa7df073bbf42c0f12b411a685373ddf3&o=&s=1024x",
       "https://bizweb.dktcdn.net/100/471/958/products/4a-0905340.jpg",
       "https://cdn1.ivivu.com/images/2024/03/19/17/premier-deluxe-king-4-cr_bdsc4h_.webp"
     ],
@@ -428,8 +454,13 @@ const hotels = [
     "mapUrl": "https://maps.app.goo.gl/1WvZQQjEkvDPPyQS7",
     "agodaUrl": "https://www.agoda.com/vi-vn/nesta-hotel-da-nang/hotel/da-nang-vn.html",
     "images": [
+      "https://pix8.agoda.net/hotelImages/31559197/-1/ae627b4ec39cffeb20e02439293e1876.png?ce=0&s=1024x",
       "https://nestahotel.com.vn/wp-content/uploads/2026/02/DJI_0081-copy-2-1-1-1536x875.jpg",
+      
+      "https://pix8.agoda.net/hotelImages/31559197/-1/1341bf35716d0ef5932a1000e51c2e87.jpg?ce=0&s=1024x",
       "https://nestahotel.com.vn/wp-content/uploads/2026/02/DHP_4897-1.webp",
+      "https://pix8.agoda.net/hotelImages/31559197/-1/e177652a238352014a6d1c5f7bbf1a89.png?ce=0&s=1024x",
+      "https://pix8.agoda.net/property/78294919/0/521ba85ed11e325955873f9ffdcc9568.jpeg?ce=2&s=1024x",
       "https://nestahotel.com.vn/wp-content/uploads/2026/02/banner-1-1024x583.webp",
       "https://nestahotel.com.vn/wp-content/uploads/2026/02/post-2-1-1536x875.jpg",
       "https://nestahotel.com.vn/wp-content/uploads/2026/02/Nesta-valley-1024x576.jpg"
@@ -484,11 +515,14 @@ const hotels = [
     "mapUrl": "https://maps.app.goo.gl/6mCxgKnsvrqfwaaR6",
     "agodaUrl": "https://www.agoda.com/vi-vn/seven-sea-hotel-da-nang_4/hotel/da-nang-vn.html",
     "images": [
-      "https://sevenseahotel.com/uploads/gal/tmp_1678848066.jpg",
-      "https://sevenseahotel.com/uploads/gal/tmp_1730428473.jpg",
+      "https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/460459870.jpg?k=194d89a12a9cb0898d03283c5ef380c65ecafa3850b40bbb1119f169c9ab0068&o=&s=1024x",
+      "https://pix8.agoda.net/hotelImages/37904525/0/374cf347cd4021deb42f7249af8ef9ae.jpg?ce=2&s=1024x",
+      "https://sevenseahotel.com/uploads/gal/tmp_1678848066.jpg",    
       "https://sevenseahotel.com/uploads/gal/tmp_1730429711.jpg",
       "https://sevenseahotel.com/uploads/product/37.png",
-      "https://sevenseahotel.com/uploads/gal/tmp_1730429506.jpg"
+      "https://pix8.agoda.net/hotelImages/37904525/-1/e1339fa3035375b4e6c9fac4d01a3704.jpg?ce=0&s=1024x",
+      "https://sevenseahotel.com/uploads/gal/tmp_1730429506.jpg",
+      "https://pix8.agoda.net/property/37904525/0/657501ee1aeca0397cc4757b4c5a45da.jpeg?ce=3&s=1024x"
     ],
     "amenities": [
       {
@@ -540,10 +574,15 @@ const hotels = [
     "agodaUrl": "https://www.agoda.com/vi-vn/fivitel-da-nang-hotel/hotel/da-nang-vn.html",
     "images": [
       "https://pix8.agoda.net/hotelImages/2915722/-1/76a5daeb13863b20a9446577139d92a8.jpg",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/c316d4ccf2e1ac944e43d8e1c0cfcb20.jpg?ca=7&ce=1&s=1024x",      
       "https://pix8.agoda.net/hotelImages/2915722/-1/be4b54132a25d4fb8f0b9833da2f4b3e.jpg",
+      "https://pix8.agoda.net/property/76991247/0/c3d0582cf2bf0fa73dffcbbb6111622a.jpeg?ce=2&s=1024x",
       "https://pix8.agoda.net/hotelImages/2915722/-1/92a8f70c48975fb7aefb596fed7998d5.jpg",
       "https://pix8.agoda.net/hotelImages/2915722/-1/773404524011d7e3648ade7937e2026e.jpg",
-      "https://pix8.agoda.net/hotelImages/2915722/-1/8899a98d758c837f3fbe6b3b989626bb.jpg"
+      "https://pix8.agoda.net/property/76991247/0/6905da7ec885739a196cf91846aca010.jpeg?ce=3&s=1024x",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/00b9276915fbd7b984e45f913a18b79b.jpg?ca=7&ce=1&s=1024x",
+      "https://pix8.agoda.net/hotelImages/2915722/-1/8899a98d758c837f3fbe6b3b989626bb.jpg",
+      "https://pix8.agoda.net/property/2915722/0/9ec7758d347c124cde5f165fee19aa57.jpeg?ce=3&s=1024x"
     ],
     "amenities": [
       {
@@ -595,11 +634,15 @@ const hotels = [
     "mapUrl": "https://maps.app.goo.gl/HqUKKPqsmsqMRr479",
     "agodaUrl": "https://www.agoda.com/vi-vn/minh-toan-galaxy-hotel-da-nang/hotel/da-nang-vn.html",
     "images": [
-      "https://cdn1.ivivu.com/images/2024/10/23/14/dji_0011_kr4oey_wqhskd_.webp",
+      "https://pix8.agoda.net/hotelImages/625913/-1/247d78361dbc70e22125711ef6d23353.jpg?ce=0&s=1024x",
+      
       "https://pix8.agoda.net/property/625913/0/c5b9560b118c90da7c8d368791573a1a.jpeg",
       "https://pix8.agoda.net/hotelImages/625913/-1/d46a0d81e87070e727d627b2f5bcb277.jpg",
       "https://pix8.agoda.net/hotelImages/625913/-1/e8c61d8df34876ba58834d6ea414ef95.jpg",
-      "https://pix8.agoda.net/hotelImages/625913/-1/84f4aad1fe62314b8f139547cf9c6b87.jpg"
+      "https://pix8.agoda.net/hotelImages/625913/-1/123f5ca8d7dffd54ddf1282b25e96f6a.jpg?ce=0&s=1024x",
+      "https://pix8.agoda.net/hotelImages/625913/-1/84f4aad1fe62314b8f139547cf9c6b87.jpg",
+      "https://pix8.agoda.net/hotelImages/625913/-1/8085a321f8891b0a102b2cab609b0ce8.jpg?ce=0&s=1024x",
+      "https://cdn1.ivivu.com/images/2024/10/23/14/dji_0011_kr4oey_wqhskd_.webp"
     ],
     "amenities": [
       {
@@ -658,7 +701,17 @@ hotels.forEach((hotel) => {
             <span class="hotel-card-img-badge">${hotel.stars}★</span>
         </div>
         <div class="hotel-info">
-            <h3>${hotel.name}</h3>
+            <div class="hotel-title-row">
+                <h3>${hotel.name}</h3>
+                <div class="hotel-quick-actions" aria-label="Thao tác nhanh cho ${hotel.name}">
+                    <button type="button" class="hotel-action-btn hotel-action-btn--street" data-tooltip="Street View" title="Street View" aria-label="Mở Street View của ${hotel.name}" onclick="event.stopPropagation(); openGoogleStreetView('${hotel.id}')">
+                        <i class="fa-solid fa-street-view" aria-hidden="true"></i>
+                    </button>
+                    <a href="${hotel.mapUrl}" target="_blank" rel="noopener noreferrer" class="hotel-action-btn hotel-action-btn--map" data-tooltip="Google Maps" title="Google Maps" aria-label="Mở ${hotel.name} trên Google Maps" onclick="event.stopPropagation()">
+                        <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
             ${cardHighlightHTML}
             <div class="badges">
                 <span class="badge"><i class="fa-solid fa-star" style="color:#f59e0b"></i> ${hotel.rating}</span>
