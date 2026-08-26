@@ -647,7 +647,7 @@ hotels.forEach((hotel) => {
     const mainImg = hotel.images[0];
     const cardHighlightHTML = showPrice
         ? `<div class="price-tag">${hotel.price}</div>`
-        : `<div class="review-tagline"><i class="fa-solid fa-quote-left" aria-hidden="true"></i><span>${hotel.reviewTagline}</span></div>`;
+        : `<div class="review-tagline"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i><span>${hotel.reviewTagline}</span></div>`;
     const card = document.createElement('div');
     card.className = 'hotel-card';
     card.id = 'card-' + hotel.id;
