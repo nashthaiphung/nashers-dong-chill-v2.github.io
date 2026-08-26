@@ -884,30 +884,45 @@ async function toggleRoute() {
     <div class="author-text">
         <span class="author-name">Created by <strong>Thai Phung</strong></span>
         <span class="author-extra">• Nashtech 2026 &nbsp;
-          <span id="page-view-counter" style="color: #38bdf8;" title="Tổng lượt mở trang"><i class="fa-solid fa-eye" aria-hidden="true"></i> &nbsp; <span id="page-view-count">...</span></span>
+          <span id="page-view-counter" style="color: #38bdf8;" title="Tổng số lần mở trang"><i class="fa-solid fa-eye" aria-hidden="true"></i> &nbsp; <span id="page-view-count">...</span></span>
         </span>
     </div>
 </div>
-<script src="https://counterapi.com/c.js?ns=nashers-dong-chill-v2.github.io" async></script>
-<div class="counterapi" key="homepage" action="view" behavior="view" nocss="true" noicon="true" style="display:none;"></div>
 <script>
-// Mirror the value rendered by CounterAPI into the existing author badge.
-(function syncPageViewCounter() {
-    const source = document.querySelector('.counterapi');
-    const target = document.getElementById('page-view-count');
-    if (!source || !target) return;
+// CounterAPI: record every page load as a separate event, then read the total.
+(async function countEveryPageLoad() {
+    const counterElement = document.getElementById('page-view-count');
+    if (!counterElement) return;
 
-    const sync = () => {
-        const text = source.textContent.trim();
-        const match = text.match(/[\d.,]+/);
-        if (match) target.textContent = match[0];
-    };
+    const namespace = 'nashthaiphung.github.io';
+    const action = 'nashers-dong-chill-v2-page-load';
+    const requestId = typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const eventKey = `open-${requestId}`;
+    const cacheBuster = Date.now();
 
-    new MutationObserver(sync).observe(source, { childList: true, subtree: true, characterData: true });
-    sync();
-    setTimeout(() => {
-        if (target.textContent === '...') target.textContent = '—';
-    }, 8000);
+    try {
+        // A unique key makes this page load a distinct event, including reload/F5.
+        const incrementUrl = `https://counterapi.com/api/${encodeURIComponent(namespace)}/${encodeURIComponent(action)}/${encodeURIComponent(eventKey)}?_=${cacheBuster}`;
+        const incrementResponse = await fetch(incrementUrl, { cache: 'no-store' });
+        if (!incrementResponse.ok) throw new Error(`CounterAPI increment HTTP ${incrementResponse.status}`);
+        await incrementResponse.json();
+
+        // "any" aggregates every unique page-load event under this action and is read-only.
+        const totalUrl = `https://counterapi.com/api/${encodeURIComponent(namespace)}/${encodeURIComponent(action)}/any?readOnly=true&_=${Date.now()}`;
+        const totalResponse = await fetch(totalUrl, { cache: 'no-store' });
+        if (!totalResponse.ok) throw new Error(`CounterAPI total HTTP ${totalResponse.status}`);
+
+        const totalData = await totalResponse.json();
+        const total = Number(totalData.value);
+        if (!Number.isFinite(total)) throw new Error('CounterAPI returned an invalid total');
+
+        counterElement.textContent = total.toLocaleString('vi-VN');
+    } catch (error) {
+        console.warn('Không thể cập nhật số lần mở trang:', error);
+        counterElement.textContent = '—';
+    }
 })();
 </script>
 </body>
