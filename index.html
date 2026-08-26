@@ -883,8 +883,33 @@ async function toggleRoute() {
     </div>
     <div class="author-text">
         <span class="author-name">Created by <strong>Thai Phung</strong></span>
-        <span class="author-extra">• Nashtech 2026</span>
+        <span class="author-extra">• Nashtech 2026 &nbsp;
+          <span id="page-view-counter" style="color: #38bdf8;" title="Tong luot mo trang"><i class="fa-solid fa-eye" aria-hidden="true"></i> &nbsp; <span id="page-view-count">...</span></span>
+        </span>
     </div>
 </div>
+<script>
+// Page view counter - CounterAPI public service (free, no API key required)
+(async function updatePageViewCounter() {
+    const countElement = document.getElementById('page-view-count');
+    if (!countElement) return;
+
+    try {
+        const response = await fetch('https://counterapi.com/api/nashers-dong-chill-2026/view/homepage', {
+            method: 'GET',
+            cache: 'no-store'
+        });
+        if (!response.ok) throw new Error(`CounterAPI HTTP ${response.status}`);
+
+        const data = await response.json();
+        if (!Number.isFinite(Number(data.value))) throw new Error('CounterAPI returned an invalid value');
+
+        countElement.textContent = Number(data.value).toLocaleString('vi-VN');
+    } catch (error) {
+        console.warn('Không thể tải số lượt mở trang:', error);
+        countElement.textContent = '—';
+    }
+})();
+</script>
 </body>
 </html>
