@@ -33,6 +33,9 @@
         .hotel-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
         .hotel-info h3 { font-size: 0.88rem; font-weight: 700; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .price-tag { color: #e11d48; font-weight: 800; font-size: 0.85rem; margin: 3px 0; }
+        .review-tagline { margin: 3px 0; padding: 5px 8px; display: flex; align-items: flex-start; gap: 6px; color: #334155; background: linear-gradient(135deg, #f0f9ff, #f8fafc); border: 1px solid #bae6fd; border-left: 3px solid var(--primary); border-radius: 8px; font-size: 0.66rem; font-weight: 600; line-height: 1.35; }
+        .review-tagline i { color: var(--primary); font-size: 0.68rem; margin-top: 2px; flex-shrink: 0; }
+        .review-tagline span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
         .badges { display: flex; gap: 4px; flex-wrap: wrap; }
         .badge { font-size: 0.68rem; padding: 2px 7px; border-radius: 6px; background: #f0f9ff; color: #0369a1; font-weight: 600; border: 1px solid #bae6fd; white-space: nowrap; }
         #map-container { flex: 1; height: 100%; position: relative; }
@@ -241,6 +244,8 @@ const hotels = [
   {
     "id": "nalod",
     "name": "NALOD Đà Nẵng Hotel",
+    "shortName": "NALOD Đà Nẵng",
+    "reviewTagline": "View biển ngút tầm mắt, hồ bơi đẹp & CSKH rất chu đáo!",
     "stars": 5,
     "rating": "4.8",
     "price": "2.200.000 - 4.500.000đ",
@@ -294,6 +299,8 @@ const hotels = [
   {
     "id": "paracel",
     "name": "Paracel Beach Hotel",
+    "shortName": "Paracel Beach",
+    "reviewTagline": "Nội thất dát vàng sang trọng, đối diện bãi biển cực tiện!",
     "stars": 4,
     "rating": "4.6",
     "price": "1.300.000 - 2.800.000đ",
@@ -347,6 +354,8 @@ const hotels = [
   {
     "id": "muongthanh",
     "name": "Mường Thanh Luxury Sông Hàn",
+    "shortName": "Mường Thanh",
+    "reviewTagline": "Vị trí trung tâm sầm uất, phòng siêu rộng & giường rất to.",
     "stars": 5,
     "rating": "4.7",
     "price": "1.200.000 - 2.500.000đ",
@@ -400,6 +409,8 @@ const hotels = [
   {
     "id": "nesta",
     "name": "Nesta Danang Hotel",
+    "shortName": "Nesta Danang",
+    "reviewTagline": "Đối diện bãi biển Mỹ Khê, quán cafe xinh, đồ ăn hợp vị.",
     "stars": 4,
     "rating": "4.5",
     "price": "1.000.000 - 2.000.000đ",
@@ -454,6 +465,8 @@ const hotels = [
   {
     "id": "sevensea",
     "name": "7 Seven Sea Hotel",
+    "shortName": "7 Seven Sea",
+    "reviewTagline": "Ngắm bình minh ngay từ giường ngủ, sát biển cực đáng tiền!",
     "stars": 4,
     "rating": "4.4",
     "price": "900.000 - 1.800.000đ",
@@ -507,6 +520,8 @@ const hotels = [
   {
     "id": "fivitel",
     "name": "Fivitel Danang Hotel",
+    "shortName": "Fivitel Danang",
+    "reviewTagline": "Hồ bơi vô cực view sông Hàn đỉnh cao, không gian thư thái.",
     "stars": 4,
     "rating": "4.6",
     "price": "850.000 - 1.700.000đ",
@@ -561,6 +576,8 @@ const hotels = [
   {
     "id": "minhtoan",
     "name": "Minh Toàn Galaxy Hotel",
+    "shortName": "Minh Toàn",
+    "reviewTagline": "Sát ngay Công viên Châu Á, view phố đẹp, ra Chợ Hàn 5 phút.",
     "stars": 4,
     "rating": "4.5",
     "price": "800.000 - 1.500.000đ",
@@ -624,9 +641,13 @@ L.marker([16.0640, 108.2490], { icon: L.divIcon({ className:'beach-label', html:
 const markerGroup = L.featureGroup();
 const markersMap = {};
 const hotelListContainer = document.getElementById('hotel-list-container');
+const showPrice = new URLSearchParams(window.location.search).get('show-price') === '1';
 // TP
 hotels.forEach((hotel) => {
     const mainImg = hotel.images[0];
+    const cardHighlightHTML = showPrice
+        ? `<div class="price-tag">${hotel.price}</div>`
+        : `<div class="review-tagline"><i class="fa-solid fa-quote-left" aria-hidden="true"></i><span>${hotel.reviewTagline}</span></div>`;
     const card = document.createElement('div');
     card.className = 'hotel-card';
     card.id = 'card-' + hotel.id;
@@ -638,7 +659,7 @@ hotels.forEach((hotel) => {
         </div>
         <div class="hotel-info">
             <h3>${hotel.name}</h3>
-            <div class="price-tag">${hotel.price}</div>
+            ${cardHighlightHTML}
             <div class="badges">
                 <span class="badge"><i class="fa-solid fa-star" style="color:#f59e0b"></i> ${hotel.rating}</span>
                 <span class="badge"><i class="fa-solid fa-water"></i> ${hotel.beachDist}</span>
@@ -648,7 +669,7 @@ hotels.forEach((hotel) => {
         // Thai Phung
     const customIcon = L.divIcon({
         className: 'custom-pin-container',
-        html: `<div class="custom-hotel-marker" style="background-image:url('${mainImg}');"><div class="marker-price-badge">${hotel.priceTag}</div></div>`,
+        html: `<div class="custom-hotel-marker" style="background-image:url('${mainImg}');"><div class="marker-price-badge">${showPrice ? hotel.priceTag : hotel.shortName}</div></div>`,
         iconSize: [52, 52], iconAnchor: [26, 26]
     });
     const marker = L.marker([hotel.lat, hotel.lng], { icon: customIcon });
