@@ -793,7 +793,7 @@ function createPopupHTML(hotel) {
 function startCarousel(hotelId, totalSlides) {
     stopCarousel(hotelId);
     let idx = 0;
-    activeCarouselIntervals[hotelId] = setInterval(() => { idx = (idx + 1) % totalSlides; showSlide(hotelId, idx, totalSlides); }, 3000);
+    activeCarouselIntervals[hotelId] = setInterval(() => { idx = (idx + 1) % totalSlides; showSlide(hotelId, idx, totalSlides); }, 1000);
 }
 function stopCarousel(hotelId) { if(activeCarouselIntervals[hotelId]) { clearInterval(activeCarouselIntervals[hotelId]); delete activeCarouselIntervals[hotelId]; } }
 function manualSelectSlide(hotelId, index) { const h = hotels.find(x => x.id===hotelId); if(!h) return; showSlide(hotelId,index,h.images.length); startCarousel(hotelId,h.images.length); }
