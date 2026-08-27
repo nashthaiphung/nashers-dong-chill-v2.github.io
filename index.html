@@ -110,8 +110,66 @@
         .author-credit:hover::before { opacity: 1; animation: authorSheen 0.85s cubic-bezier(0.22,1,0.36,1); }
         .author-credit:hover i { transform: rotate(-10deg) scale(1.16); color: #0284c7; box-shadow: 0 4px 14px rgba(15,23,42,0.24), 0 0 0 5px rgba(255,255,255,0.12); }
         .author-credit:hover span { letter-spacing: 0.025em; text-shadow: 0 2px 10px rgba(15,23,42,0.2); }
+
+        /* MUSIC TOGGLE: compact companion control in the header */
+        .music-toggle {
+            margin-left: 7px;
+            margin-top: 12px;
+            padding: 7px 11px;
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            vertical-align: top;
+            color: white;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.24);
+            border-radius: 999px;
+            box-shadow: 0 6px 16px rgba(3,105,161,0.22);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            font: inherit;
+            font-size: 0.72rem;
+            font-weight: 700;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .music-toggle i {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            background: white;
+            border-radius: 50%;
+            font-size: 0.66rem;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.16);
+        }
+        .music-toggle:hover,
+        .music-toggle:focus-visible {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.23);
+            border-color: rgba(255,255,255,0.52);
+            box-shadow: 0 10px 22px rgba(3,105,161,0.30), 0 0 0 3px rgba(125,211,252,0.12);
+            outline: none;
+        }
+        .music-toggle.is-playing {
+            background: rgba(5,150,105,0.82);
+            border-color: rgba(167,243,208,0.72);
+            box-shadow: 0 8px 20px rgba(5,150,105,0.30);
+        }
+        .music-toggle.is-playing i {
+            color: #047857;
+            animation: musicPulse 1.3s ease-in-out infinite;
+        }
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
         @keyframes authorSheen { 0% { transform: skewX(-18deg) translateX(-220%); } 100% { transform: skewX(-18deg) translateX(620%); } }
-        @media (prefers-reduced-motion: reduce) { .author-credit, .author-credit i, .author-credit span { transition: none; } .author-credit:hover { transform: none; } .author-credit:hover::before { animation: none; opacity: 0; } .hotel-action-btn, .hotel-action-btn::before, .hotel-action-btn::after { transition: none; } .hotel-card:hover .hotel-action-btn i { animation: none; } }
+        @media (prefers-reduced-motion: reduce) { .author-credit, .author-credit i, .author-credit span, .music-toggle { transition: none; } .author-credit:hover, .music-toggle:hover { transform: none; } .author-credit:hover::before { animation: none; opacity: 0; } .music-toggle.is-playing i { animation: none; } .hotel-action-btn, .hotel-action-btn::before, .hotel-action-btn::after { transition: none; } .hotel-card:hover .hotel-action-btn i { animation: none; } }
         /* =========================================
           AUTHOR BADGE COMPONENT - THAI PHUNG
           ========================================= */
@@ -231,6 +289,10 @@
                  <!-- <i class="fa-solid fa-dragon" aria-hidden="true"></i> -->
                 <span>Team <strong>CDL Hồ Chí Minh</strong></span>
             </div>
+            <button id="music-toggle" class="music-toggle" type="button" aria-pressed="false" title="Bật nhạc nền">
+                <i class="fa-solid fa-music" aria-hidden="true"></i>
+                <span>Bật nhạc</span>
+            </button>
         </div>
         <div class="controls">
             <button id="btn-route" class="btn btn-primary" onclick="toggleRoute()">
@@ -910,6 +972,50 @@ async function toggleRoute() {
     setTimeout(() => {
         if (target.textContent === '...') target.textContent = '—';
     }, 8000);
+})();
+</script>
+<script src="summer-music.js"></script>
+<script>
+(function initMusicToggle() {
+    const button = document.getElementById('music-toggle');
+    if (!button) return;
+
+    const icon = button.querySelector('i');
+    const label = button.querySelector('span');
+
+    function renderMusicState(isPlaying) {
+        button.classList.toggle('is-playing', isPlaying);
+        button.setAttribute('aria-pressed', String(isPlaying));
+        button.title = isPlaying ? 'Tắt nhạc nền' : 'Bật nhạc nền';
+        icon.className = isPlaying ? 'fa-solid fa-volume-high' : 'fa-solid fa-music';
+        label.textContent = isPlaying ? 'Tắt nhạc' : 'Bật nhạc';
+    }
+
+    button.addEventListener('click', async () => {
+        if (!window.SummerMusic) {
+            console.warn('Không tìm thấy SummerMusic. Hãy kiểm tra file summer-music.js.');
+            return;
+        }
+
+        button.disabled = true;
+        try {
+            if (SummerMusic.isPlaying) {
+                SummerMusic.stop();
+                renderMusicState(false);
+            } else {
+                await SummerMusic.start();
+                SummerMusic.setVolume(0.20);
+                renderMusicState(true);
+            }
+        } catch (error) {
+            console.error('Không thể thay đổi trạng thái nhạc nền:', error);
+            renderMusicState(false);
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+    renderMusicState(false);
 })();
 </script>
 </body>
