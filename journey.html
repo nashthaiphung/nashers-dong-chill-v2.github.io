@@ -13,6 +13,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <style>
@@ -27,7 +30,8 @@
             --glass: rgba(255, 255, 255, .38);
             --line: rgba(255, 255, 255, .72)
         }
-/* Thai phung */
+
+        /* Thai phung */
         * {
             box-sizing: border-box
         }
@@ -141,6 +145,344 @@
 
         .pill:hover {
             transform: translateY(-2px)
+        }
+
+        /* Base cho Google Material Symbols Outlined (ligature font) — bắt buộc phải khai báo font-family này,
+           nếu không các chuỗi như "music_off", "volume_off" sẽ hiển thị dạng text thay vì icon glyph. */
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased
+        }
+
+        /* === Music Control — nút bật/tắt nhạc nền dạng icon button lớn, giữ tinh thần "pill glass" =====
+           .music-control bọc .music-trigger (nút chính, luôn có hiệu ứng lan tỏa musicHalo) và .music-menu
+           (submenu lùi/mute/tới hiện khi hover hoặc khi JS thêm class is-open lúc click/chạm). */
+        .music-control {
+            position: relative
+        }
+
+        .music-trigger {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, .85);
+            color: #fff;
+            background: linear-gradient(145deg, #00788d, #00bad8);
+            box-shadow: 0 10px 26px rgba(0, 188, 220, .42), 0 0 0 4px rgba(44, 216, 251, .16);
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: .2s ease
+        }
+
+        .music-trigger:hover,
+        .music-trigger:focus-visible {
+            transform: scale(1.06);
+            box-shadow: 0 14px 32px rgba(0, 188, 220, .5), 0 0 0 6px rgba(44, 216, 251, .22);
+            outline: 0
+        }
+
+        .music-trigger:active {
+            transform: scale(.94)
+        }
+
+        .music-trigger .material-symbols-outlined {
+            font-size: 28px;
+            font-variation-settings: 'FILL' 1, 'wght' 550, 'GRAD' 0, 'opsz' 24
+        }
+
+        /* Hiệu ứng lan tỏa (halo) liên tục quanh nút chính, khác với hiệu ứng hover nhấc lên của submenu */
+        .music-trigger:after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border: 1px solid rgba(44, 216, 251, .7);
+            border-radius: 26px;
+            animation: musicHalo 2.4s ease-in-out infinite;
+            pointer-events: none
+        }
+
+        @keyframes musicHalo {
+            50% {
+                opacity: .35;
+                transform: scale(1.08)
+            }
+        }
+
+        .music-menu {
+            position: absolute;
+            left: calc(100% + 14px);
+            top: 50%;
+            display: flex;
+            gap: 6px;
+            padding: 7px;
+            border-radius: 16px;
+            background: rgba(244, 250, 253, .96);
+            border: 1px solid #fff;
+            box-shadow: 0 12px 30px rgba(0, 31, 38, .27);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translate(-8px, -50%) scale(.96);
+            transition: .18s ease
+        }
+
+        /* Vùng đệm vô hình giữa nút chính và submenu để hover không bị "rớt" khi rê chuột qua khoảng trống */
+        .music-menu::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: -8px;
+            width: 22px;
+            height: calc(100% + 16px)
+        }
+
+        .music-control:hover .music-menu,
+        .music-control:focus-within .music-menu,
+        .music-control.is-open .music-menu {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translate(0, -50%) scale(1)
+        }
+
+        .music-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border: 0;
+            border-radius: 11px;
+            color: #004e5c;
+            background: #ddf4f8;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: .16s ease
+        }
+
+        .music-action .material-symbols-outlined {
+            font-size: 22px;
+            font-variation-settings: 'FILL' 1, 'wght' 550, 'GRAD' 0, 'opsz' 24
+        }
+
+        .music-action:hover,
+        .music-action:focus-visible {
+            color: #fff;
+            background: #00687a;
+            transform: translateY(-2px);
+            outline: 3px solid rgba(44, 216, 251, .24)
+        }
+
+        .music-action:active {
+            transform: scale(.94)
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            .music-trigger,
+            .music-action,
+            .music-menu {
+                transition: none !important
+            }
+
+            .music-trigger:after {
+                animation: none
+            }
+        }
+
+        /* === Author Control — nút "Created by AABB" đối diện nút nhạc (góc dưới phải) =====================
+           Mặc định chỉ hiện icon, phong cách kính trong suốt hơn .glass thường. Rê vào: nút giãn rộng lộ chữ
+           "Created by AABB" (tên tác giả được nhấn màu cam), nền chuyển sang tông cam nhạt kiểu gương kính,
+           có tia sáng lướt qua (::before shine sweep) và icon lắc nhẹ qua lại. Bấm vào: icon nhảy mạnh hơn.
+           Rê ra ngoài: tự thu nhỏ lại nhờ transition trên max-width/opacity của .author-text. */
+        .author-control {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 110
+        }
+
+        .author-trigger {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 48px;
+            border-radius: 16px;
+            padding: 0 13px;
+            border: 1px solid rgba(255, 255, 255, .55);
+            background: rgba(255, 255, 255, .2);
+            color: #083842;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 7px 16px rgba(0, 58, 68, .14);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            -webkit-tap-highlight-color: transparent;
+            transition: background .32s ease, border-color .32s ease, box-shadow .32s ease
+        }
+
+        .author-trigger .material-symbols-outlined {
+            font-size: 24px;
+            flex: 0 0 auto;
+            font-variation-settings: 'FILL' 1, 'wght' 550, 'GRAD' 0, 'opsz' 24;
+            transition: transform .2s ease
+        }
+
+        .author-trigger .author-text {
+            display: inline-block;
+            max-width: 0;
+            margin-left: 0;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .01em;
+            transition: max-width .38s cubic-bezier(.4, 0, .2, 1), opacity .28s ease, margin-left .38s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .author-text .author-name {
+            margin-left: .28em;
+            color: var(--orange);
+            font-weight: 800;
+            letter-spacing: .02em;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .6)
+        }
+
+        /* Tia sáng lướt qua mặt kính khi hover */
+        .author-trigger:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 34%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255, 255, 255, .75), transparent);
+            transform: skewX(-18deg);
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .author-trigger:hover,
+        .author-trigger:focus-visible {
+            background: rgba(255, 199, 145, .34);
+            border-color: rgba(255, 148, 66, .68);
+            box-shadow: 0 12px 28px rgba(255, 110, 20, .26);
+            outline: 0
+        }
+
+        .author-trigger:hover .author-text,
+        .author-trigger:focus-visible .author-text {
+            max-width: 190px;
+            opacity: 1;
+            margin-left: 9px
+        }
+
+        .author-trigger:hover .material-symbols-outlined,
+        .author-trigger:focus-visible .material-symbols-outlined {
+            animation: authorWiggle .55s ease-in-out
+        }
+
+        .author-trigger:hover:after,
+        .author-trigger:focus-visible:after {
+            animation: authorShine .9s ease
+        }
+
+        .author-trigger:active .material-symbols-outlined {
+            animation: authorJump .42s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        @keyframes authorWiggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg)
+            }
+
+            25% {
+                transform: rotate(-15deg)
+            }
+
+            75% {
+                transform: rotate(15deg)
+            }
+        }
+
+        @keyframes authorJump {
+            0% {
+                transform: translateY(0) scale(1)
+            }
+
+            40% {
+                transform: translateY(-11px) scale(1.28) rotate(-6deg)
+            }
+
+            70% {
+                transform: translateY(2px) scale(.94)
+            }
+
+            100% {
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        @keyframes authorShine {
+            0% {
+                left: -60%;
+                opacity: 0
+            }
+
+            15% {
+                opacity: .95
+            }
+
+            100% {
+                left: 130%;
+                opacity: 0
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            .author-trigger,
+            .author-trigger .author-text,
+            .author-trigger .material-symbols-outlined {
+                transition: none !important
+            }
+
+            .author-trigger:hover .material-symbols-outlined,
+            .author-trigger:active .material-symbols-outlined,
+            .author-trigger:hover:after {
+                animation: none !important
+            }
+        }
+
+        @media(max-width:520px) {
+            .author-control {
+                right: 12px;
+                bottom: 12px
+            }
+
+            .author-trigger:hover .author-text,
+            .author-trigger:focus-visible .author-text {
+                max-width: 150px
+            }
         }
 
         /* Nút lọc hoạt động: mỗi nút một màu tươi sáng theo ý nghĩa, trạng thái active nổi bật rõ */
@@ -269,7 +611,18 @@
             bottom: 28px;
             font-size: 12px;
             letter-spacing: .2em;
-            text-transform: uppercase
+            text-transform: uppercase;
+            transform: translate(-50%, -50%) rotate(-2deg);
+            padding: 9px 15px;
+            border-radius: 999px;
+            font: 800 12px "Baloo 2";
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--orange);
+            box-shadow: 0 6px 0 #c73b00;
+            white-space: nowrap;
+            left: 50%;
         }
 
         .chapter {
@@ -386,7 +739,8 @@
             min-height: 1180px;
             margin-top: 3vh
         }
-/* t -- p */
+
+        /* t -- p */
         .roadmap .route-svg {
             z-index: 0
         }
@@ -436,7 +790,8 @@
             padding: 4px 9px;
             box-shadow: 0 5px 14px #0b66b51f
         }
-/* TP: t-p */
+
+        /* TP: t-p */
         .roadmap .station:hover,
         .roadmap .station:focus-visible {
             transform: translate(-50%, -50%) scale(1.07) translateY(-6px);
@@ -761,14 +1116,15 @@
             50% {
                 transform: rotate(1.4deg) translateX(4px)
             } */
-             0%,
+            0%,
             100% {
-                transform: translate(-40px, 0px) rotate(-1.4deg) 
+                transform: translate(-40px, 0px) rotate(-1.4deg)
             }
 
             50% {
-                transform: translate(40px, 0px) rotate(1.4deg) 
+                transform: translate(40px, 0px) rotate(1.4deg)
             }
+
             /* 0%,
             100% 
             {
@@ -781,7 +1137,7 @@
                 transform: translate(40px, -40px) rotate(-1.4deg) 
             } */
 
-            
+
         }
 
         /* Tạm dừng hiệu ứng nhảy múa khi phần trên (~50%) của #places đã cuộn qua khỏi đầu màn hình, tránh gây rối mắt khi người dùng đã chuyển sang đọc nội dung kế tiếp */
@@ -939,6 +1295,55 @@
                 scroll-behavior: auto !important
             }
         }
+
+        .moving-container {
+            position: absolute;
+            white-space: nowrap;
+            will-change: transform, left;
+            /* Đảm bảo container không chiếm hết chiều rộng màn hình */
+            display: inline-block;
+        }
+
+        /* Hiệu ứng nhảy múa phức tạp cho từng ký tự */
+        .char {
+            display: inline-block;
+            font-size: 3rem;
+            /* Sử dụng ease-in-out để mượt mà ở các điểm chuyển hướng */
+            animation: dance infinite ease-in-out;
+            /* Giúp transform mượt mà hơn trên một số trình duyệt */
+            transform-origin: bottom center;
+        }
+
+        /* KEYFRAMES MỚI: Quy trình nhảy múa 2 phía */
+        @keyframes dance {
+
+            /* 1. BẮT ĐẦU: Vị trí cân bằng */
+            0% {
+                transform: rotate(0deg) translateY(0px) scale(1);
+            }
+
+            /* 2. NHẢY LÊN & LẮC SANG PHẢI */
+            25% {
+                /* Xoay phải 15 độ, nhảy lên 10px, phóng to nhẹ */
+                transform: rotate(15deg) translateY(-10px) scale(1.1);
+            }
+
+            /* 3. VỀ VỊ TRÍ CÂN BẰNG (Giữa chu kỳ) */
+            50% {
+                transform: rotate(0deg) translateY(0px) scale(1);
+            }
+
+            /* 4. NHẢY LÊN & LẮC SANG TRÁI */
+            75% {
+                /* Xoay trái 15 độ, nhảy lên 10px, phóng to nhẹ */
+                transform: rotate(-15deg) translateY(-10px) scale(1.1);
+            }
+
+            /* 5. KẾT THÚC: Về lại vị trí cân bằng để lặp lại */
+            100% {
+                transform: rotate(0deg) translateY(0px) scale(1);
+            }
+        }
     </style>
 </head>
 
@@ -950,16 +1355,42 @@
             href="#d12"><span>12/09</span></a><a href="#d13"><span>13/09</span></a><a href="#activities"><span>6 lựa
                 chọn</span></a><a href="#d14"><span>14/09</span></a><a href="#places"><span>Điểm đến</span></a><a
             href="#gala"><span>Gala Show</span></a><a href="#final"><span>Hẹn gặp lại</span></a></nav>
-    <div class="controls"><button class="pill glass" id="sound">♪ Bật âm thanh</button></div>
+    <div class="controls">
+        <div class="music-control">
+            <button class="music-trigger" type="button" id="sound" aria-label="Điều khiển nhạc" aria-haspopup="true"
+                aria-expanded="false"><span class="material-symbols-outlined" data-main-icon>music_off</span></button>
+            <div class="music-menu" aria-label="Điều khiển phát nhạc"><button class="music-action" data-action="prev"
+                    aria-label="Lùi bài" title="Lùi bài"><span
+                        class="material-symbols-outlined">skip_previous</span></button><button class="music-action"
+                    data-action="toggle" aria-label="Bật nhạc" title="Bật hoặc tắt nhạc"><span
+                        class="material-symbols-outlined" data-mute-icon>volume_off</span></button><button
+                    class="music-action" data-action="next" aria-label="Bài tiếp" title="Bài tiếp"><span
+                        class="material-symbols-outlined">skip_next</span></button></div>
+        </div>
+        <audio id="home-audio" preload="none"></audio>
+    </div>
+    <div class="author-control">
+        <button class="author-trigger" type="button" aria-label="Thông tin tác giả"><span
+                class="material-symbols-outlined">code</span><span class="author-text">Created by<span
+                    class="author-name">AABB</span></span></button>
+    </div>
     <section id="hero" class="hero">
         <div class="cloud" style="left:-80px;top:20%"></div>
-        <div class="cloud" style="right:-80px;top:12%"></div><span class="float" style="left:8%;top:19%">🏮</span><span
-            class="float" style="right:9%;top:20%">🐉</span><span class="float"
-            style="left:13%;bottom:22%">🏄</span><span class="float" style="right:13%;bottom:19%">📸</span><span
-            class="float" style="left:48%;top:8%">☀️</span>
+        <div class="cloud" style="right:-80px;top:12%"></div>
+        <span class="float" style="left:8%;top:25%">🏮</span>
+        <span class="float" style="right:9%;top:20%">🐉</span>
+        <span class="float" style="left:13%;bottom:22%">🏄</span>
+        <span class="float" style="right:13%;bottom:19%">📸</span>
+        <span class="float" style="left:48%;top:4%">🌞</span>
+
+        <span class="float" style="left:25%;top:12%">🍻</span>
+        <span class="float" style="left:73%;top:43%">🎤</span>
+        <span class="float" style="left:28%;top:43%">🎡</span>
+        <span class="float" aria-hidden="true" style="left:46%;bottom:13%"
+            style="transform: translate(-18.3574px, 9.46462px) rotate(-6.11913deg);">🏖️</span>
         <div>
             <div class="badge">📍 ĐÀ NẴNG · 12, 13, 14/09/2026</div>
-            <h1>La Cà<span>Lô Cồ</span></h1>
+            <h1 style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">La Cà<span>Lô Cồ</span></h1>
             <p class="sub">Nashers Đồng Chill · Season 2<br>Bật chung tần số, len lỏi phố biển, gom đầy trải nghiệm
                 nguyên bản.</p>
         </div>
@@ -979,15 +1410,16 @@
                     </linearGradient>
                 </defs>
                 <path class="track" d="M40,130 C210,5 355,250 500,145 S785,40 850,225 S1010,430 1170,315" />
-                <path class="track-color draw" pathLength="100" d="M40,130 C210,5 355,250 500,145 S785,40 850,225 S1010,430 1170,315" />
+                <path class="track-color draw" pathLength="100"
+                    d="M40,130 C210,5 355,250 500,145 S785,40 850,225 S1010,430 1170,315" />
             </svg>
             <div class="traveler"></div>
-            <div class="station glass" style="left:9%;top:25%" data-step="01" data-title="Đến Đà Nẵng"
+            <div class="station glass" style="left:9%;top:20%" data-step="01" data-title="Đến Đà Nẵng"
                 data-text="06:00 tự túc di chuyển. Shuttle bus sân bay hoạt động từ 08:00 đến 15:00. Nhận phòng từ 14:00.">
                 <div class="icon">✈️</div><b>Đến Đà Nẵng</b><small>06:00 · 08:00 · 14:00</small><span
                     class="station-hint">Shuttle sân bay & nhận phòng · Rê để xem, nhấn để mở</span>
             </div>
-            <div class="station glass" style="left:40%;top:29%" data-step="02" data-title="Tham quan Hội An"
+            <div class="station glass" style="left:40%;top:32%" data-step="02" data-title="Tham quan Hội An"
                 data-text="15:30 tập trung tại sảnh, 16:00 khởi hành đến Đảo Ký Ức Hội An. 19:00 tự do trải nghiệm phố cổ về đêm.">
                 <div class="icon">🏮</div><b>Tham quan Hội An</b><small>15:30 → 20:30</small><span
                     class="station-hint">Đảo Ký Ức và phố cổ về đêm · Rê để xem, nhấn để mở</span>
@@ -1038,7 +1470,8 @@
                 <div class="icon">⛰️</div><b>Trekking Bạch Mã - Ngũ Hồ</b><small>04:30–17:00</small><span
                     class="station-hint">Cung 15 km, thử thách cao · Rê để xem, nhấn để mở</span>
             </article>
-            <article class="station glass" style="left:15.8%;top:24.4%" data-step="03" data-title="Công viên nước Mikazuki"
+            <article class="station glass" style="left:15.8%;top:24.4%" data-step="03"
+                data-title="Công viên nước Mikazuki"
                 data-text="Vui chơi và ăn trưa tại công viên nước trong nhà và ngoài trời.">
                 <div class="icon">🛟</div><b>Công viên nước Mikazuki</b><small>08:30–14:00</small><span
                     class="station-hint">Trong nhà và ngoài trời · Rê để xem, nhấn để mở</span>
@@ -1061,8 +1494,9 @@
                 <div class="icon">🌅</div><b>Chèo SUP đón bình minh biển Mân Thái</b><small>04:30–07:00</small><span
                     class="station-hint">Phù hợp người mới · Rê để xem, nhấn để mở</span>
             </article>
-            <div class="route-caption" style="left:66%;top:59%">6 nhánh hội tụ</div>
-            <article class="station glass" style="left:48.3%;top:66.7%" data-step="07" data-title="Tham quan Thành phố Đà Nẵng"
+            <div class="route-caption" style="left:60%;top:55%; transform: skew(337deg, 20deg);">6 nhánh hội tụ</div>
+            <article class="station glass" style="left:48.3%;top:66.7%" data-step="07"
+                data-title="Tham quan Thành phố Đà Nẵng"
                 data-text="14:00 City Tour. Cung 1 gồm Bán đảo Sơn Trà và Chùa Linh Ứng. Cung 2 gồm Cầu Tình Yêu và Chợ Hàn. 15:30 tập trung trở về khách sạn.">
                 <div class="icon">🌆</div><b>Tham quan Thành phố Đà Nẵng</b><small>City Tour · 14:00</small><span
                     class="station-hint">6 nhánh cùng hội tụ về đây · Rê để xem, nhấn để mở</span>
@@ -1103,7 +1537,7 @@
                 <path class="track-color draw" pathLength="100" d="M80,250 C280,80 400,400 600,225 S930,100 1120,290" />
             </svg>
             <div class="traveler"></div>
-            <div class="station glass" style="left:12%;top:47%" data-step="01" data-title="Ăn sáng"
+            <div class="station glass" style="left:9%;top:43%" data-step="01" data-title="Ăn sáng"
                 data-text="Bắt đầu ngày cuối bằng bữa sáng tại khách sạn lúc 06:30.">
                 <div class="icon">☕</div><b>Ăn sáng</b><small>06:30</small><span class="station-hint">Khởi động ngày
                     cuối thật chậm rãi · Rê để xem, nhấn để mở</span>
@@ -1113,7 +1547,7 @@
                 <div class="icon">🧳</div><b>Checkout</b><small>11:00</small><span class="station-hint">Kiểm tra hành
                     lý và trả phòng · Rê để xem, nhấn để mở</span>
             </div>
-            <div class="station glass" style="left:89%;top:54%" data-step="03" data-title="Về nhà"
+            <div class="station glass" style="left:91%;top:55%" data-step="03" data-title="Về nhà"
                 data-text="Từ 12:00, mỗi người tiếp tục lịch trình về nhà theo kế hoạch cá nhân.">
                 <div class="icon">🏠</div><b>Về nhà</b><small>12:00 · theo lịch cá nhân</small><span
                     class="station-hint">Tiếp tục hành trình riêng · Rê để xem, nhấn để mở</span>
@@ -1157,8 +1591,13 @@
                 về</p>
         </div>
     </section>
-    <section id="final" class="final"><span class="float" style="left:8%;top:15%">🌴</span><span class="float"
-            style="right:8%;top:20%">☀️</span>
+    <section id="final" class="final">
+        <span class="float" style="left:8%;top:15%">🍾</span>
+        <span class="float" style="left:45%;top:8%; transform: rotate(45deg);">✈️</span>
+        <span class="float" style="right:8%;top:20%">☀️</span>
+        <span class="float" style="right:12%;top:73%">🏖️</span>
+        <span class="float" style="right:38%;top:82%">✨</span>
+        <span class="float" style="left:13%;bottom:22%">🏝️</span>
         <div>
             <div class="kicker">Nashers Đồng Chill · Season 2</div>
             <h2>Hẹn nhau<br><span style="color:var(--orange)">ở Đà Nẵng!</span></h2>
@@ -1247,8 +1686,181 @@
         gsap.to('.progress', { width: '100%', ease: 'none', scrollTrigger: { scrub: .2 } }); gsap.to('.float', { y: 'random(-35,35)', x: 'random(-20,20)', rotation: 'random(-12,12)', duration: 3, repeat: -1, yoyo: true, stagger: .2, ease: 'sine.inOut' });
         const sections = [...document.querySelectorAll('section')], links = [...document.querySelectorAll('.nav a')]; sections.forEach((s, i) => ScrollTrigger.create({ trigger: s, start: 'top center', end: 'bottom center', onToggle: x => x.isActive && (links.forEach(a => a.classList.remove('active')), links[i]?.classList.add('active')) }));
         let mx = innerWidth / 2, my = innerHeight / 2; addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; gsap.to('.cursor', { x: mx, y: my, duration: .12 }); document.querySelectorAll('.hero .float').forEach((f, i) => { let r = f.getBoundingClientRect(), dx = r.left + r.width / 2 - mx, dy = r.top + r.height / 2 - my, d = Math.hypot(dx, dy); if (d < 150) gsap.to(f, { x: dx / d * 70, y: dy / d * 70, duration: .35 }) }) });
-        let ac, soundOn = false; function ping(freq = 380) { if (!soundOn) return; let o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = freq; o.type = 'sine'; g.gain.setValueAtTime(.025, ac.currentTime); g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + .12); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + .13) } document.querySelector('#sound').onclick = e => { soundOn = !soundOn; if (soundOn && !ac) ac = new (window.AudioContext || window.webkitAudioContext)(); e.target.textContent = soundOn ? '♫ Âm thanh đang bật' : '♪ Bật âm thanh'; ping(660) }; document.querySelectorAll('a,button,.station,.activity,.place').forEach(el => el.addEventListener('mouseenter', () => ping(300)));
+        /* t-p: nút #sound giờ là icon button (.music-trigger) điều khiển nhạc nền thật (xem IIFE cuối file quản lý audio/playlist).
+           ping() chỉ còn vai trò hiệu ứng "tiếng click" nhẹ khi hover các phần tử tương tác, được gate bởi trạng thái
+           bật/tắt nhạc thật (window.isSoundOn, expose từ IIFE quản lý audio) thay vì một biến soundOn riêng lẻ như trước —
+           tránh việc gán lại textContent lên nút làm mất icon <span> lồng bên trong. */
+        let ac; function ping(freq = 380) { if (!window.isSoundOn || !window.isSoundOn()) return; if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); let o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = freq; o.type = 'sine'; g.gain.setValueAtTime(.025, ac.currentTime); g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + .12); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + .13) } window.ping = ping; document.querySelectorAll('a,button,.station,.activity,.place').forEach(el => el.addEventListener('mouseenter', () => ping(300)));
+    </script>
+    <div id="emoji-wrapper" class="moving-container"></div>
+
+    <script>
+        const originalText = "🎊🤪😎🤩🎉";
+        const wrapper = document.getElementById("emoji-wrapper");
+
+        // 1. Tách chuỗi ký tự thành từng span riêng và gán nhịp nhảy độc lập
+        [...originalText].forEach((char) => {
+            const span = document.createElement("span");
+            span.textContent = char;
+            span.className = "char";
+
+            // Random thời gian cho một chu kỳ nhảy (ví dụ: từ 0.6s đến 1s)
+            // Tăng thời gian lên một chút so với trước để thấy rõ nhịp "về giữa"
+            span.style.animationDuration = `${0.6 + Math.random() * 0.4}s`;
+
+            // Random độ trễ để các ký tự không nhảy cùng lúc
+            span.style.animationDelay = `${Math.random() * 0.5}s`;
+
+            wrapper.appendChild(span);
+        });
+
+        // Hàm tạo độ trễ ngẫu nhiên từ 2s đến 5s khi ẩn
+        const getRandomPause = () => (Math.random() * 3 + 2) * 1000;
+
+        // 2. Quy trình di chuyển ẩn/hiện liên tục (Giữ nguyên logic cũ)
+        async function startAnimationLoop() {
+            const moveDuration = 8000; // Thời gian di chuyển ngang 8s
+
+            while (true) {
+                // --- LƯỢT 1: TỪ TRÁI SANG PHẢI ---
+                // Đặt độ cao top random trước khi xuất hiện
+                wrapper.style.top = `${Math.floor(Math.random() * 70) + 10}%`; // Giới hạn 10%-80% để không dính mép
+
+                const animToRight = wrapper.animate([
+                    { left: '-10%', transform: 'translateX(-100%)' },
+                    { left: '110%', transform: 'translateX(0%)' }
+                ], {
+                    duration: moveDuration,
+                    easing: 'linear',
+                    fill: 'forwards'
+                });
+
+                await animToRight.finished;
+
+                // Tạm dừng 2-5 giây ngoài màn hình bên phải
+                await new Promise(resolve => setTimeout(resolve, getRandomPause()));
+
+                // --- LƯỢT 2: TỪ PHẢI SANG TRÁI ---
+                // Đặt lại độ cao top random cho lượt mới
+                wrapper.style.top = `${Math.floor(Math.random() * 70) + 10}%`;
+
+                const animToLeft = wrapper.animate([
+                    { left: '110%', transform: 'translateX(0%)' },
+                    { left: '-10%', transform: 'translateX(-100%)' }
+                ], {
+                    duration: moveDuration,
+                    easing: 'linear',
+                    fill: 'forwards'
+                });
+
+                await animToLeft.finished;
+
+                // Tạm dừng 2-5 giây ngoài màn hình bên trái
+                await new Promise(resolve => setTimeout(resolve, getRandomPause()));
+            }
+        }
+
+        // Bắt đầu vòng lặp
+        startAnimationLoop();
+    </script>
+    <script>
+        (function () {
+            const audio = document.getElementById('home-audio');
+            const playlist = ['music/track-1.mp3', 'music/track-2.mp3', 'music/track-3.mp3'];
+            let trackIndex = 0;
+            let soundOn = false;
+            // t--p
+            function syncMusicUI() {
+                document.querySelectorAll('[data-mute-icon]').forEach(icon => {
+                    icon.textContent = soundOn ? 'volume_up' : 'volume_off';
+                });
+                document.querySelectorAll('[data-main-icon]').forEach(icon => {
+                    icon.textContent = soundOn ? 'graphic_eq' : 'music_off';
+                });
+                document.querySelectorAll('[data-action="toggle"]').forEach(button => {
+                    button.setAttribute('aria-label', soundOn ? 'Tắt nhạc' : 'Bật nhạc');
+                });
+            }
+
+            function loadTrack(shouldPlay) {
+                audio.src = playlist[trackIndex];
+                audio.load();
+                if (shouldPlay && soundOn) audio.play().catch(() => { });
+            }
+
+            function toggleMusic() {
+                soundOn = !soundOn;
+                audio.muted = !soundOn;
+                if (soundOn) {
+                    if (!audio.src) loadTrack(false);
+                    audio.play().catch(() => {
+                        soundOn = false;
+                        audio.muted = true;
+                        syncMusicUI();
+                    });
+                } else {
+                    audio.pause();
+                }
+                syncMusicUI();
+            }
+
+            function changeTrack(step) {
+                trackIndex = (trackIndex + step + playlist.length) % playlist.length;
+                loadTrack(soundOn);
+            }
+            // TP
+            document.querySelectorAll('[data-action]').forEach(button => {
+                button.addEventListener('click', event => {
+                    event.stopPropagation();
+                    if (button.dataset.action === 'toggle') toggleMusic();
+                    if (button.dataset.action === 'prev') changeTrack(-1);
+                    if (button.dataset.action === 'next') changeTrack(1);
+                });
+            });
+
+            // Thai Phung. Main Music button now toggles audio and keeps the submenu available.
+            document.querySelectorAll('.music-trigger, .mobile-music-trigger').forEach(trigger => {
+                trigger.addEventListener('click', event => {
+                    event.stopPropagation();
+                    toggleMusic();
+                    const wrapper = trigger.parentElement;
+                    wrapper.classList.add('is-open');
+                    trigger.setAttribute('aria-expanded', 'true');
+                });
+            });
+
+            document.querySelectorAll('.author-trigger, .mobile-author-trigger').forEach(trigger => {
+                trigger.addEventListener('click', event => {
+                    event.stopPropagation();
+                    const wrapper = trigger.parentElement;
+                    const shouldOpen = !wrapper.classList.contains('is-open');
+                    document.querySelectorAll('.author-control.is-open, .mobile-author-wrap.is-open').forEach(item => {
+                        item.classList.remove('is-open');
+                        item.querySelector('[aria-expanded]')?.setAttribute('aria-expanded', 'false');
+                    });
+                    wrapper.classList.toggle('is-open', shouldOpen);
+                    trigger.setAttribute('aria-expanded', String(shouldOpen));
+                });
+            });
+
+            document.addEventListener('click', event => {
+                if (!event.target.closest('.music-control, .mobile-music-wrap, .author-control, .mobile-author-wrap')) {
+                    document.querySelectorAll('.music-control.is-open, .mobile-music-wrap.is-open, .author-control.is-open, .mobile-author-wrap.is-open').forEach(item => {
+                        item.classList.remove('is-open');
+                        item.querySelector('[aria-expanded]')?.setAttribute('aria-expanded', 'false');
+                    });
+                }
+            });
+
+            audio.addEventListener('ended', () => changeTrack(1));
+            syncMusicUI();
+
+            // t-p: expose trạng thái bật/tắt nhạc cho hiệu ứng "tiếng click" nhẹ (ping) ở script phía trên,
+            // để hover các phần tử khác chỉ phát tiếng khi nhạc đang được người dùng bật.
+            window.isSoundOn = () => soundOn;
+        })();
     </script>
 </body>
 <!-- THai Phung 2026 -->
+
 </html>
