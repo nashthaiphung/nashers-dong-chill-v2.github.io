@@ -2081,9 +2081,43 @@
             }
 
             function loadTrack(shouldPlay) {
-                audio.src = playlist[trackIndex];
+                audio.src = blobUrls.get(trackIndex) || playlist[trackIndex];
                 audio.load();
-                if (shouldPlay && soundOn) audio.play().catch(() => { });
+                cacheBlob(trackIndex);
+                if (shouldPlay && soundOn) playAudio().catch(() => { });
+            }
+
+            // Thai Phung: Chromium cannot stream local mp3s over file://, so keep
+            // a Blob-URL cache per track and swap it in when the element stalls.
+            const blobUrls = new Map();
+            let stallTimer;
+
+            function cacheBlob(index) {
+                if (blobUrls.has(index)) return;
+                fetch(playlist[index])
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+                    .then(b => blobUrls.set(index, URL.createObjectURL(b)))
+                    .catch(() => { });
+            }
+
+            function recoverStalled() {
+                if (!soundOn || audio.readyState !== 0 || blobUrls.has(trackIndex)) return;
+                fetch(playlist[trackIndex])
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+                    .then(b => {
+                        blobUrls.set(trackIndex, URL.createObjectURL(b));
+                        audio.src = blobUrls.get(trackIndex);
+                        audio.load();
+                        audio.play().catch(() => { });
+                    })
+                    .catch(() => { });
+            }
+
+            function playAudio() {
+                return audio.play().then(() => {
+                    clearTimeout(stallTimer);
+                    stallTimer = setTimeout(recoverStalled, 1500);
+                });
             }
 
             function toggleMusic() {
@@ -2091,12 +2125,13 @@
                 audio.muted = !soundOn;
                 if (soundOn) {
                     if (!audio.src) loadTrack(false);
-                    audio.play().catch(() => {
+                    playAudio().catch(() => {
                         soundOn = false;
                         audio.muted = true;
                         syncMusicUI();
                     });
                 } else {
+                    clearTimeout(stallTimer);
                     audio.pause();
                 }
                 syncMusicUI();
@@ -2152,6 +2187,25 @@
 
             audio.addEventListener('ended', () => changeTrack(1));
             syncMusicUI();
+            
+            // Thai Phung: any first click / tap / key anywhere starts the music
+            // and refreshes the play-button state. Attached on window in the
+            // capture phase so it runs before (and is not blocked by) the
+            // stopPropagation() calls of the nav/menu buttons below.
+            function unlockMusicOnGesture(event) {
+                if (event && event.isTrusted === false) return;
+                // Music controls handle themselves — avoid double toggling.
+                if (event && event.target instanceof Element &&
+                    event.target.closest('.music-control, .mobile-music-wrap')) return;
+                if (soundOn) return; // already unlocked in a previous gesture
+                window.removeEventListener('click', unlockMusicOnGesture, true);
+                window.removeEventListener('keydown', unlockMusicOnGesture, true);
+                window.removeEventListener('touchend', unlockMusicOnGesture, true);
+                toggleMusic(); // turns sound on and calls syncMusicUI()
+            }
+            window.addEventListener('click', unlockMusicOnGesture, true);
+            window.addEventListener('keydown', unlockMusicOnGesture, true);
+            window.addEventListener('touchend', unlockMusicOnGesture, true);
 
             // t-p: expose trạng thái bật/tắt nhạc cho hiệu ứng "tiếng click" nhẹ (ping) ở script phía trên,
             // để hover các phần tử khác chỉ phát tiếng khi nhạc đang được người dùng bật.
