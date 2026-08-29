@@ -249,6 +249,204 @@
             background-position: center;
             background-blend-mode: overlay;
         }
+
+        .pulse-btn {
+            animation: pulse-soft 2s infinite;
+        }
+        @keyframes pulse-soft {
+            0% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 184, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0); }
+        }
+
+        /* ===== Music toggle button (Thai Phung) ===== */
+        .music-toggle {
+            position: fixed;
+            bottom: 68px;
+            right: 24px;
+            z-index: 60;
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, rgba(0, 204, 238, 0.85), rgba(255, 184, 0, 0.85));
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 104, 122, 0.35);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(255, 184, 0, 0.55);
+        }
+
+        .music-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Invite attention while music is NOT playing */
+        .music-toggle.paused {
+            animation: music-hint 2s infinite;
+        }
+
+        @keyframes music-hint {
+            0% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.6); }
+            70% { box-shadow: 0 0 0 16px rgba(255, 184, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0); }
+        }
+
+        /* Equalizer bars shown while playing */
+        .eq-bars {
+            display: none;
+            align-items: flex-end;
+            gap: 4px;
+            height: 26px;
+        }
+
+        .music-toggle.playing .eq-bars {
+            display: flex;
+        }
+
+        .music-toggle.playing .music-icon {
+            display: none;
+        }
+
+        .eq-bars span {
+            width: 5px;
+            border-radius: 2px;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+            animation: eq-bounce 1s ease-in-out infinite;
+        }
+
+        .eq-bars span:nth-child(1) { animation-delay: 0s;    height: 40%; }
+        .eq-bars span:nth-child(2) { animation-delay: 0.15s; height: 75%; }
+        .eq-bars span:nth-child(3) { animation-delay: 0.3s;  height: 55%; }
+        .eq-bars span:nth-child(4) { animation-delay: 0.45s; height: 85%; }
+
+        @keyframes eq-bounce {
+            0%, 100% { transform: scaleY(0.4); }
+            50%      { transform: scaleY(1); }
+        }
+
+        /* Tooltip label */
+        .music-toggle .music-label {
+            position: absolute;
+            right: 74px;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #fff;
+            background: rgba(0, 104, 122, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            opacity: 0;
+            transform: translateX(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .music-toggle:hover .music-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 640px) {
+            .music-toggle {
+                width: 54px;
+                height: 54px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        /* ===== Water surface effect: waves + foam (Thai Phung) ===== */
+        .water-scene {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Soft moving light reflections on the water */
+        .water-scene::before {
+            content: "";
+            position: absolute;
+            inset: -25%;
+            background:
+                radial-gradient(60% 50% at 20% 30%, rgba(0, 204, 238, 0.28), transparent 60%),
+                radial-gradient(50% 45% at 80% 70%, rgba(255, 184, 0, 0.20), transparent 60%),
+                radial-gradient(45% 40% at 60% 15%, rgba(255, 255, 255, 0.30), transparent 65%);
+            filter: blur(12px);
+            animation: water-shimmer 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes water-shimmer {
+            0%   { transform: translate3d(-3%, -2%, 0) scale(1) rotate(0deg); }
+            50%  { transform: translate3d(2%, 3%, 0) scale(1.07) rotate(1.5deg); }
+            100% { transform: translate3d(3%, -3%, 0) scale(1.03) rotate(-1deg); }
+        }
+
+        .wave-svg {
+            position: absolute;
+            left: 0;
+            width: 200%;
+            height: 55%;
+        }
+
+        .wave-1 { bottom: -14%; height: 62%; opacity: 0.55; animation: wave-drift 11s linear infinite; }
+        .wave-2 { bottom: -8%;  height: 54%; opacity: 0.40; animation: wave-drift 17s linear infinite reverse; }
+        .wave-3 { bottom: -3%;  height: 46%; opacity: 0.35; animation: wave-drift 23s linear infinite; }
+
+        @keyframes wave-drift {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        /* Soft foam crest along the top of the main wave */
+        .foam-crest {
+            filter: blur(1.5px);
+        }
+
+        /* Rising foam bubbles */
+        .foam-layer {
+            position: absolute;
+            inset: 0;
+        }
+
+        .foam-dot {
+            position: absolute;
+            bottom: -14px;
+            border-radius: 9999px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.15) 60%, transparent 75%);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+            animation: foam-rise linear infinite;
+        }
+
+        @keyframes foam-rise {
+            0%   { bottom: -14px; transform: translateX(0) scale(0.5); opacity: 0; }
+            12%  { opacity: 0.9; }
+            55%  { transform: translateX(16px) scale(1); opacity: 0.55; }
+            80%  { opacity: 0.3; }
+            100% { bottom: 104%; transform: translateX(-12px) scale(1.15); opacity: 0; }
+        }
+
+        /* Keep card content above the water layer */
+        .glass-card > *:not(.water-scene) {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 
@@ -301,9 +499,25 @@
     <!-- Main Content -->
     <main class="flex-grow flex items-center justify-center px-margin-mobile md:px-gutter pt-28 pb-16 relative z-10">
         <div
-            class="glass-card rounded-[2rem] p-8 md:p-14 max-w-3xl w-full text-center fade-in-up hover:scale-[1.02] transition-transform duration-500 ease-out">
+            class="glass-card relative overflow-hidden rounded-[2rem] p-8 md:p-14 max-w-3xl w-full text-center fade-in-up hover:scale-[1.02] transition-transform duration-500 ease-out">
+            <!-- Water surface: waves + foam (Thai Phung) -->
+            <div class="water-scene" aria-hidden="true">
+                <svg class="wave-svg wave-1" viewBox="0 0 2880 320" preserveAspectRatio="none">
+                    <path class="wave-path" fill="rgba(0, 204, 238, 0.35)"
+                        d="M0,160 C120,120 240,200 360,160 C480,120 600,200 720,160 C840,120 960,200 1080,160 C1200,120 1320,200 1440,160 C1560,120 1680,200 1800,160 C1920,120 2040,200 2160,160 C2280,120 2400,200 2520,160 C2640,120 2760,200 2880,160 L2880,320 L0,320 Z" />
+                </svg>
+                <svg class="wave-svg wave-2" viewBox="0 0 2880 320" preserveAspectRatio="none">
+                    <path class="wave-path" fill="rgba(255, 184, 0, 0.28)"
+                        d="M0,180 C160,140 320,220 480,180 C640,140 800,220 960,180 C1120,140 1280,220 1440,180 C1600,140 1760,220 1920,180 C2080,140 2240,220 2400,180 C2560,140 2720,220 2880,180 L2880,320 L0,320 Z" />
+                </svg>
+                <svg class="wave-svg wave-3" viewBox="0 0 2880 320" preserveAspectRatio="none">
+                    <path class="wave-path" fill="rgba(255, 255, 255, 0.30)"
+                        d="M0,200 C180,160 360,240 540,200 C720,160 900,240 1080,200 C1260,160 1440,240 1620,200 C1800,160 1980,240 2160,200 C2340,160 2520,240 2700,200 C2790,180 2835,190 2880,200 L2880,320 L0,320 Z" />
+                </svg>
+                <div class="foam-layer"></div>
+            </div>
             <div
-                class="inline-block bg-white/40 border border-white/60 backdrop-blur-md rounded-full px-6 py-2 mb-8 text-primary font-label-bold tracking-widest text-sm uppercase shadow-sm animate-float">
+                class="inline-block bg-white/40 border border-white/60 backdrop-blur-md rounded-full px-6 py-2 mb-8 text-primary font-label-bold tracking-widest text-sm uppercase shadow-sm animate-float relative z-10">
                 SEPTEMBER 2026 • ĐÀ NẴNG
             </div>
             <!-- TP -->
@@ -316,8 +530,15 @@
                 Nashers Đồng Chill - Season 2: La Cà Lô Cồ. Bật tần số thảnh thơi, sẵn sàng mood la cà. Chuẩn bị cho một
                 hành trình biển xanh, cát trắng và những kỷ niệm khó quên.
             </p>
-            <button
-                class="group relative inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-primary-container to-inverse-primary text-primary-fixed-variant font-headline-md text-headline-md rounded-full overflow-hidden shadow-[0_8px_30px_rgba(0,204,238,0.4)] hover:shadow-[0_12px_40px_rgba(0,204,238,0.7)] transition-all duration-300 hover:scale-105 border border-white/40"
+            <button class="pulse-btn bg-gradient-to-r from-sunset-amber to-secondary-container text-on-secondary font-headline-md text-headline-md py-4 px-10 rounded-full hover:scale-105 transition-transform duration-300 shadow-xl shadow-sunset-amber/20">
+                        <span class="relative z-10 flex items-center gap-3 text-white drop-shadow-sm">
+                    Notify Me
+                    <span aria-hidden="true"
+                        class="material-symbols-outlined text-white text-3xl">notifications_active</span>
+                </span>
+                    </button>
+            <!-- <button
+                class="pulse-btn group relative inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-primary-container to-inverse-primary text-primary-fixed-variant font-headline-md text-headline-md rounded-full overflow-hidden shadow-[0_8px_30px_rgba(0,204,238,0.4)] hover:shadow-[0_12px_40px_rgba(0,204,238,0.7)] transition-all duration-300 hover:scale-105 border border-white/40"
                 style="animation: pulse-glow 3s infinite;">
                 <span
                     class="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -326,7 +547,7 @@
                     <span aria-hidden="true"
                         class="material-symbols-outlined text-white text-3xl">notifications_active</span>
                 </span>
-            </button>
+            </button> -->
         </div>
     </main>
     <!-- Footer Component -->
@@ -350,6 +571,195 @@
                 href="#">Contact Us</a>
         </div>
     </footer>
+
+    <!-- ===== Background music + toggle button: music/wave.mp3 (Thai Phung) ===== -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="music/wave.mp3" type="audio/mpeg" />
+    </audio>
+    <button id="music-toggle" class="music-toggle paused" type="button"
+        aria-label="Play background music" aria-pressed="false">
+        <span class="music-label">Chill music</span>
+        <span aria-hidden="true" class="material-symbols-outlined music-icon" style="font-size:30px;">volume_up</span>
+        <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    </button>
+    <script>
+        (function () {
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            if (!audio || !btn) return;
+
+            const SRC = 'music/wave.mp3';
+            let blobTried = false;
+
+            function render() {
+                const playing = !audio.paused;
+                btn.classList.toggle('playing', playing);
+                btn.classList.toggle('paused', !playing);
+                btn.setAttribute('aria-pressed', String(playing));
+                btn.setAttribute('aria-label', playing ? 'Stop background music' : 'Play background music');
+                btn.querySelector('.music-icon').textContent = playing ? 'volume_up' : 'volume_off';
+                btn.querySelector('.music-label').textContent = playing ? 'Đang phát nhạc' : 'Nghe nhạc chill';
+            }
+
+            function playMusic() {
+                return audio.play().then(() => {
+                    render();
+                    removeUnlock(); // stop listening once we've successfully started
+                }).catch(() => {
+                    render(); // still blocked — keep the pulsing hint visible
+                });
+            }
+
+            function pauseMusic() {
+                audio.pause();
+                render();
+            }
+
+            // Some browsers (notably Chromium over file://) cannot stream local
+            // mp3 files directly. Fallback: fetch the file as a Blob and play it.
+            function loadViaBlob() {
+                if (blobTried) return;
+                blobTried = true;
+                fetch(SRC)
+                    .then((r) => {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.blob();
+                    })
+                    .then((b) => {
+                        audio.src = URL.createObjectURL(b);
+                        audio.load();
+                        playMusic();
+                    })
+                    .catch(() => { blobTried = false; });
+            }
+
+            // If metadata never arrives shortly after load, switch to the blob.
+            audio.addEventListener('loadedmetadata', () => {
+                // Native streaming works — nothing to do.
+            }, { once: true });
+            setTimeout(() => {
+                if (audio.readyState === 0 && audio.networkState !== 1) loadViaBlob();
+            }, 2000);
+            audio.addEventListener('error', () => loadViaBlob(), { once: true });
+
+            // Toggle button handles both manual control and the autoplay fallback:
+            // if autoplay is blocked, the button pulses and the user can start
+            // music with a single click / tap / Enter / Space.
+            btn.addEventListener('click', () => {
+                if (audio.readyState === 0 && !blobTried) { loadViaBlob(); return; }
+                if (audio.ended) audio.currentTime = 0;
+                audio.paused ? playMusic() : pauseMusic();
+            });
+
+            // Reflect natural audio events (e.g. blocked load, errors) in the UI.
+            audio.addEventListener('play', render);
+            audio.addEventListener('pause', render);
+
+            // Autoplay attempt: only fires on gestures that browsers accept as
+            // "user activation" (click / keydown / touchend — NOT mousemove).
+            function unlockAndPlay(e) {
+                if (e && e.isTrusted === false) return;
+                // Let the toggle button handle its own clicks (avoids the
+                // capture listener playing, then the button handler pausing).
+                // Note: e.target is often an inner span, not the button itself.
+                if (e && e.target && btn.contains(e.target)) return;
+                playMusic();
+            }
+            function removeUnlock() {
+                ['click', 'keydown', 'touchend'].forEach((evt) =>
+                    window.removeEventListener(evt, unlockAndPlay, true)
+                );
+            }
+            function armUnlock() {
+                ['click', 'keydown', 'touchend'].forEach((evt) =>
+                    window.addEventListener(evt, unlockAndPlay, { capture: true, passive: true })
+                );
+            }
+
+            // Try autoplay right away (works if the browser allows it).
+            audio.muted = false;
+            audio.volume = 0.7;
+            audio.play().then(render).catch(render);
+            armUnlock(); // any first real gesture starts playback
+        })();
+    </script>
+
+    <script>
+        // ===== Water surface: random smooth wave morphing + foam (Thai Phung) =====
+        (function () {
+            const scene = document.querySelector('.water-scene');
+            if (!scene) return;
+
+            // --- 1. Randomly morph each wave path with smooth curves ---
+            const paths = document.querySelectorAll('.wave-path');
+            const WAVE_COUNT = 3;
+            const SEGMENTS = 12;          // number of curve segments across the doubled width
+            const VIEW_W = 2880, VIEW_H = 320;
+
+            // Per-wave random state (amplitude, speed, baseline)
+            const waves = Array.from(paths).map((_, i) => ({
+                base: 150 + i * 22,                       // vertical baseline per layer
+                amp: 26 + Math.random() * 22,             // random amplitude
+                phase: Math.random() * Math.PI * 2,       // random phase offset
+                speed: 0.35 + Math.random() * 0.4,        // random speed
+                freq: 1.5 + Math.random() * 1.2           // random frequency
+            }));
+
+            function wavePathD(w, t) {
+                // Build a smooth random-ish sine surface using cubic beziers
+                const step = VIEW_W / SEGMENTS;
+                let d = `M0,${w.base.toFixed(1)}`;
+                let prevY = w.base;
+                for (let s = 1; s <= SEGMENTS; s++) {
+                    const x = s * step;
+                    const y = w.base
+                        + Math.sin(t * w.speed + w.phase + s * w.freq) * w.amp
+                        + Math.sin(t * w.speed * 0.6 + s * w.freq * 0.5) * w.amp * 0.35;
+                    // control points at midpoints for soft, rounded crests
+                    const cx1 = x - step * 0.55, cy1 = prevY;
+                    const cx2 = x - step * 0.45, cy2 = y;
+                    d += ` C${cx1.toFixed(1)},${cy1.toFixed(1)} ${cx2.toFixed(1)},${cy2.toFixed(1)} ${x.toFixed(1)},${y.toFixed(1)}`;
+                    prevY = y;
+                }
+                d += ` L${VIEW_W},${VIEW_H} L0,${VIEW_H} Z`;
+                return d;
+            }
+
+            let start = null;
+            function animateWaves(ts) {
+                if (start === null) start = ts;
+                const t = (ts - start) / 1000;
+                paths.forEach((p, i) => p.setAttribute('d', wavePathD(waves[i], t)));
+                requestAnimationFrame(animateWaves);
+            }
+            requestAnimationFrame(animateWaves);
+
+            // --- 2. Continuous random foam bubbles ---
+            const foamLayer = scene.querySelector('.foam-layer');
+            const FOAM_COUNT = 22;
+
+            function spawnFoam() {
+                const dot = document.createElement('span');
+                dot.className = 'foam-dot';
+                const size = 4 + Math.random() * 12;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                dot.style.left = Math.random() * 100 + '%';
+                const dur = 6 + Math.random() * 8;
+                dot.style.animationDuration = dur + 's';
+                dot.style.animationDelay = -(Math.random() * dur) + 's'; // start mid-flight
+                foamLayer.appendChild(dot);
+                // recycle when done
+                dot.addEventListener('animationend', () => dot.remove());
+            }
+
+            for (let i = 0; FOAM_COUNT > i; i++) spawnFoam();
+            // keep replenishing foam so it never runs out
+            setInterval(() => {
+                if (foamLayer.childElementCount < FOAM_COUNT) spawnFoam();
+            }, 700);
+        })();
+    </script>
 </body>
 
 </html>
