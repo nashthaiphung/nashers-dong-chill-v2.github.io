@@ -991,7 +991,7 @@ void main() {
     </div>
     <!-- STITCH_THREEJS_END:ANIMATION_4 -->
     <!-- SideNavBar (Shared Component Template Implementation) -->
-    <nav class="home-side-nav flex-col items-center z-40 backdrop-blur-lg fixed left-unit top-1/3 h-fit rounded-full">
+    <nav class="home-side-nav flex-col items-center z-40 backdrop-blur-lg fixed left-unit h-fit rounded-full" style="top: 20%;">
         <img class="home-nav-logo rounded-full object-cover"
             data-alt="A small, stylized logo icon representing a coastal journey."
             src="image/lacaloco.PNG" />
@@ -1001,6 +1001,9 @@ void main() {
         <a class="home-nav-item" href="hotel-map.html" aria-describedby="tip-hotel"><span
                 class="material-symbols-outlined">hotel</span><span class="nav-tooltip" id="tip-hotel"
                 role="tooltip">Bản đồ Khách sạn</span></a>
+        <a class="home-nav-item" href="agenda.html" aria-describedby="tip-exp"><span
+                class="material-symbols-outlined">calendar_clock</span><span class="nav-tooltip" id="tip-exp"
+                role="tooltip">Lịch trình</span></a>
         <a class="home-nav-item" href="experience-map.html" aria-describedby="tip-exp"><span
                 class="material-symbols-outlined">local_activity</span><span class="nav-tooltip" id="tip-exp"
                 role="tooltip">Bản đồ trải nghiệm</span></a>
@@ -1167,9 +1170,43 @@ void main() {
             }
 
             function loadTrack(shouldPlay) {
-                audio.src = playlist[trackIndex];
+                audio.src = blobUrls.get(trackIndex) || playlist[trackIndex];
                 audio.load();
-                if (shouldPlay && soundOn) audio.play().catch(() => { });
+                cacheBlob(trackIndex);
+                if (shouldPlay && soundOn) playAudio().catch(() => { });
+            }
+
+            // Thai Phung: Chromium cannot stream local mp3s over file://, so keep
+            // a Blob-URL cache per track and swap it in when the element stalls.
+            const blobUrls = new Map();
+            let stallTimer;
+
+            function cacheBlob(index) {
+                if (blobUrls.has(index)) return;
+                fetch(playlist[index])
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+                    .then(b => blobUrls.set(index, URL.createObjectURL(b)))
+                    .catch(() => { });
+            }
+
+            function recoverStalled() {
+                if (!soundOn || audio.readyState !== 0 || blobUrls.has(trackIndex)) return;
+                fetch(playlist[trackIndex])
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+                    .then(b => {
+                        blobUrls.set(trackIndex, URL.createObjectURL(b));
+                        audio.src = blobUrls.get(trackIndex);
+                        audio.load();
+                        audio.play().catch(() => { });
+                    })
+                    .catch(() => { });
+            }
+
+            function playAudio() {
+                return audio.play().then(() => {
+                    clearTimeout(stallTimer);
+                    stallTimer = setTimeout(recoverStalled, 1500);
+                });
             }
 
             function toggleMusic() {
@@ -1177,12 +1214,13 @@ void main() {
                 audio.muted = !soundOn;
                 if (soundOn) {
                     if (!audio.src) loadTrack(false);
-                    audio.play().catch(() => {
+                    playAudio().catch(() => {
                         soundOn = false;
                         audio.muted = true;
                         syncMusicUI();
                     });
                 } else {
+                    clearTimeout(stallTimer);
                     audio.pause();
                 }
                 syncMusicUI();
@@ -1238,6 +1276,25 @@ void main() {
 
             audio.addEventListener('ended', () => changeTrack(1));
             syncMusicUI();
+
+            // Thai Phung: any first click / tap / key anywhere starts the music
+            // and refreshes the play-button state. Attached on window in the
+            // capture phase so it runs before (and is not blocked by) the
+            // stopPropagation() calls of the nav/menu buttons below.
+            function unlockMusicOnGesture(event) {
+                if (event && event.isTrusted === false) return;
+                // Music controls handle themselves — avoid double toggling.
+                if (event && event.target instanceof Element &&
+                    event.target.closest('.music-control, .mobile-music-wrap')) return;
+                if (soundOn) return; // already unlocked in a previous gesture
+                window.removeEventListener('click', unlockMusicOnGesture, true);
+                window.removeEventListener('keydown', unlockMusicOnGesture, true);
+                window.removeEventListener('touchend', unlockMusicOnGesture, true);
+                toggleMusic(); // turns sound on and calls syncMusicUI()
+            }
+            window.addEventListener('click', unlockMusicOnGesture, true);
+            window.addEventListener('keydown', unlockMusicOnGesture, true);
+            window.addEventListener('touchend', unlockMusicOnGesture, true);
         })();
     </script>
 </body>
