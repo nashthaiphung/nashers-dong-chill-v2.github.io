@@ -277,6 +277,93 @@
             margin-left: 8px;
         }
     </style>
+
+    <style>
+    /* Bổ sung user-select và user-drag để chống kẹt chuột khi click giữ */
+    * {
+      cursor: none !important;
+      box-sizing: border-box;
+      user-select: none; 
+      -webkit-user-drag: none;
+    }
+
+    /* Container ly bia */
+    .beer-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 65px;
+      height: 75px;
+      pointer-events: none;
+      z-index: 99999;
+      will-change: transform;
+    }
+
+    /* Khung xoay xô lệch ly bia */
+    .beer-wrapper {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: 20px 20px;
+    }
+
+    .beer-cursor.is-hovering .beer-wrapper {
+      transform: scale(1.2) rotate(-10deg);
+      filter: drop-shadow(0 0 15px rgba(255, 225, 53, 0.8));
+    }
+
+    .beer-cursor.is-pouring .beer-wrapper {
+      transform: rotate(-120deg) scale(1.05);
+    }
+
+    /* Bọt bia nổi bên trong ly */
+    @keyframes riseInside {
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      30% { opacity: 0.9; }
+      100% { transform: translateY(-35px) scale(1.2); opacity: 0; }
+    }
+    .in-bubble {
+      animation: riseInside infinite ease-in;
+      transform-box: fill-box;
+    }
+    .b1 { animation-duration: 1.1s; animation-delay: 0.0s; }
+    .b2 { animation-duration: 1.6s; animation-delay: 0.3s; }
+    .b3 { animation-duration: 1.3s; animation-delay: 0.7s; }
+    .b4 { animation-duration: 1.9s; animation-delay: 0.2s; }
+
+    /* HẠT VĂNG ĐUÔI KHI RÊ CHUỘT */
+    .trail-particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 99997;
+      animation: popAndFade 0.65s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes popAndFade {
+      0% { transform: translate(0, 0) scale(0.3); opacity: 1; }
+      50% { transform: translate(calc(var(--dx) * 0.6), calc(var(--dy) * 0.6)) scale(1.4); opacity: 0.9; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+    }
+
+    /* HẠT BIA & BỌT CHẢY KHI CLICK */
+    .pour-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99998;
+      will-change: transform, opacity;
+      animation: streamDown 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes streamDown {
+      0% { transform: translate(0, 0) scale(0.8); opacity: 1; }
+      30% { opacity: 1; }
+      100% { transform: translate(var(--px), var(--py)) scale(0.3); opacity: 0; }
+    }
+
+  
+  </style>
 </head>
 <body>
 <div id="app">
@@ -1018,5 +1105,213 @@ async function toggleRoute() {
     renderMusicState(false);
 })();
 </script>
+
+<div id="beerCursor" class="beer-cursor">
+    <div class="beer-wrapper" id="beerWrapper">
+      <svg width="65" height="75" viewBox="0 0 65 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="beerGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFF066" />
+            <stop offset="40%" stop-color="#FFB300" />
+            <stop offset="100%" stop-color="#D85D00" />
+          </linearGradient>
+          <clipPath id="glassClip">
+            <path d="M 17 20 L 20 62 C 20 65, 38 65, 38 62 L 41 20 Z" />
+          </clipPath>
+        </defs>
+
+        <path d="M 40 28 C 56 28, 56 50, 39 52" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" fill="none" opacity="0.9"/>
+        <path d="M 19 62 C 19 66, 38 66, 38 62 Z" fill="rgba(255,255,255,0.4)"/>
+        <path d="M 16 20 L 20 62 C 20 66, 38 66, 38 62 L 42 20 Z" fill="rgba(255, 255, 255, 0.18)" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M 17.5 28 L 20.5 61 C 20.5 63.5, 37.5 63.5, 37.5 61 L 40.5 28 Z" fill="url(#beerGrad)"/>
+
+        <g clip-path="url(#glassClip)">
+          <circle class="in-bubble b1" cx="23" cy="58" r="1.5" fill="#FFF" />
+          <circle class="in-bubble b2" cx="33" cy="60" r="2.0" fill="#FFF" />
+          <circle class="in-bubble b3" cx="28" cy="50" r="1.2" fill="#FFF" />
+          <circle class="in-bubble b4" cx="35" cy="54" r="1.7" fill="#FFF" />
+        </g>
+
+        <g id="foamTop">
+          <path d="M 13 24 C 13 16, 19 14, 22 18 C 25 13, 33 13, 36 18 C 39 14, 45 16, 45 24 C 45 28, 13 28, 13 24 Z" fill="#FFFFFF"/>
+          <circle cx="18" cy="18" r="5" fill="#FFFFFF"/>
+          <circle cx="29" cy="16" r="6" fill="#FFFFFF"/>
+          <circle cx="39" cy="19" r="4.5" fill="#FFFFFF"/>
+        </g>
+
+        <!-- Điểm tọa độ miệng ly -->
+        <circle id="mouthPoint" cx="16" cy="20" r="1" fill="none" />
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    const cursor = document.getElementById('beerCursor');
+    const mouthPoint = document.getElementById('mouthPoint');
+    const hoverTargets = document.querySelectorAll('a, button, .hover-target');
+    
+    let currentX = window.innerWidth / 2;
+    let currentY = window.innerHeight / 2;
+    let targetX = currentX;
+    let targetY = currentY;
+    let velocityX = 0;
+    let velocityY = 0;
+    
+    let isPouring = false;
+    let pourInterval = null;
+    let lastTrailTime = 0; // Biến giới hạn tốc độ sinh bọt
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+    });
+
+    // BẮT ĐẦU RÓT BIA
+    document.addEventListener('mousedown', () => {
+      if(isPouring) return;
+      isPouring = true;
+      cursor.classList.add('is-pouring');
+      spawnPourStream();
+      pourInterval = setInterval(spawnPourStream, 40); // Tăng khoảng thời gian lên 40ms để giảm tải DOM
+    });
+
+    // KẾT THÚC RÓT BIA (FIX LỖI KẸT)
+    function stopPouring() {
+      if (!isPouring) return;
+      isPouring = false;
+      cursor.classList.remove('is-pouring');
+      clearInterval(pourInterval);
+    }
+    
+    document.addEventListener('mouseup', stopPouring);
+    document.addEventListener('mouseleave', stopPouring); // Ngưng rót nếu rê chuột ra ngoài cửa sổ
+    window.addEventListener('blur', stopPouring); // Ngưng rót nếu Alt+Tab đi cửa sổ khác
+    
+    // Ngăn chặn sự kiện Drag nuốt sự kiện MouseUp
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // VÒNG LẶP RENDER CHÍNH
+    function render(timestamp) {
+      const ease = 0.35;
+      const dx = targetX - currentX;
+      const dy = targetY - currentY;
+      
+      currentX += dx * ease;
+      currentY += dy * ease;
+
+      velocityX = dx * ease;
+      velocityY = dy * ease;
+
+      let tilt = 0;
+      if (!isPouring) {
+        tilt = velocityX * 2.2; 
+        tilt = Math.max(-35, Math.min(35, tilt));
+      }
+
+      cursor.style.transform = `translate3d(${currentX - 15}px, ${currentY - 15}px, 0) rotate(${tilt}deg)`;
+
+      const speed = Math.hypot(velocityX, velocityY);
+      
+      // FIX LỖI GIẬT KHUNG HÌNH (Throttling)
+      // Chỉ cho phép sinh bọt đuôi nếu cách lần trước > 35ms (tránh nhồi DOM quá đà)
+      if (speed > 1.5 && !isPouring) {
+        if (timestamp - lastTrailTime > 35) {
+          createTrailParticle(currentX, currentY, velocityX, velocityY);
+          // Thi thoảng cho thêm 1 hạt để nhìn tự nhiên hơn
+          if(Math.random() > 0.5) createTrailParticle(currentX, currentY, velocityX, velocityY);
+          
+          lastTrailTime = timestamp;
+        }
+      }
+
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render); // Bắt đầu vòng lặp
+
+    function createTrailParticle(x, y, vx, vy) {
+      const p = document.createElement('div');
+      p.className = 'trail-particle';
+      
+      const isFoam = Math.random() > 0.35;
+      const size = isFoam ? (Math.random() * 6 + 3) : (Math.random() * 3.5 + 1.5);
+      
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      p.style.left = `${x + (Math.random() * 30 - 15)}px`;
+      p.style.top = `${y + (Math.random() * 30 - 15)}px`;
+
+      if (isFoam) {
+        p.style.background = '#FFFFFF';
+        p.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.9)';
+      } else {
+        p.style.background = 'rgba(255, 210, 0, 0.85)';
+        p.style.border = '1px solid rgba(255,255,255,0.6)';
+        p.style.boxShadow = '0 0 6px rgba(255, 210, 0, 0.6)';
+      }
+
+      const angle = Math.random() * Math.PI * 2;
+      const force = Math.random() * 40 + 15;
+      const driftX = -vx * 1.2 + Math.cos(angle) * force;
+      const driftY = -vy * 1.2 + Math.sin(angle) * force - 10; 
+      
+      p.style.setProperty('--dx', `${driftX}px`);
+      p.style.setProperty('--dy', `${driftY}px`);
+      
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 650);
+    }
+
+    function spawnPourStream() {
+      const mouthRect = mouthPoint.getBoundingClientRect();
+      const spawnX = mouthRect.left + mouthRect.width / 2;
+      const spawnY = mouthRect.top + mouthRect.height / 2;
+
+      // Giảm từ 3 xuống 2 hạt mỗi lần gọi để tối ưu RAM, vẫn đủ hiệu ứng đẹp mắt
+      for (let i = 0; i < 2; i++) {
+        createPourParticle(spawnX, spawnY);
+      }
+    }
+
+    function createPourParticle(startX, startY) {
+      const p = document.createElement('div');
+      p.className = 'pour-particle';
+      
+      const isFoam = Math.random() > 0.6; 
+      
+      if (isFoam) {
+        const size = Math.random() * 14 + 8;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.borderRadius = '50%';
+        p.style.background = '#FFFFFF';
+        p.style.boxShadow = '0 0 12px rgba(255, 255, 255, 0.9)';
+      } else {
+        const width = Math.random() * 6 + 6;
+        const height = Math.random() * 16 + 12;
+        p.style.width = `${width}px`;
+        p.style.height = `${height}px`;
+        p.style.borderRadius = '10px';
+        p.style.background = 'linear-gradient(180deg, #FFE033 0%, #E67300 100%)';
+        p.style.boxShadow = '0 0 8px rgba(255, 200, 0, 0.7)';
+      }
+
+      p.style.left = `${startX + (Math.random() * 12 - 6)}px`;
+      p.style.top = `${startY + (Math.random() * 6 - 3)}px`;
+
+      const spreadX = Math.random() * 50 - 35; 
+      const dropY = Math.random() * 180 + 120;  
+      
+      p.style.setProperty('--px', `${spreadX}px`);
+      p.style.setProperty('--py', `${dropY}px`);
+      
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 750);
+    }
+  </script>
 </body>
 </html>
