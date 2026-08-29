@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <!-- Thai Phung -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Nashers Đồng Chill - Hành Trình La Cà Lô Cồ</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&amp;family=Hanken+Grotesk:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#3c494d",
+                        "on-primary-fixed": "#001f26",
+                        "on-primary-container": "#005261",
+                        "surface-container-highest": "#dde4e6",
+                        "primary": "#00687a",
+                        "glass-border": "rgba(255, 255, 255, 0.6)",
+                        "surface-variant": "#dde4e6",
+                        "sunset-amber": "#FFB800",
+                        "on-surface": "#161d1f",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#eef5f7",
+                        "surface-bright": "#f4fafd",
+                        "secondary-fixed-dim": "#ffb68d",
+                        "primary-fixed-dim": "#2cd8fb",
+                        "sandy-gold": "#F2E2B0",
+                        "outline": "#6c797e",
+                        "on-secondary-fixed-variant": "#763300",
+                        "on-tertiary-fixed": "#2c1700",
+                        "tertiary": "#895200",
+                        "surface-container": "#e8eff1",
+                        "primary-container": "#00ccee",
+                        "sea-azure": "#0077CC",
+                        "on-tertiary-container": "#6d4000",
+                        "inverse-on-surface": "#ebf2f4",
+                        "tertiary-container": "#ffa73a",
+                        "on-secondary-container": "#5e2700",
+                        "inverse-surface": "#2b3134",
+                        "surface": "#f4fafd",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#331200",
+                        "surface-container-high": "#e3e9ec",
+                        "tertiary-fixed-dim": "#ffb86a",
+                        "jungle-green": "#2ECC71",
+                        "on-primary-fixed-variant": "#004e5c",
+                        "surface-dim": "#d4dbde",
+                        "secondary-container": "#fc7c1f",
+                        "on-tertiary-fixed-variant": "#683d00",
+                        "secondary-fixed": "#ffdbc9",
+                        "tertiary-fixed": "#ffdcbc",
+                        "on-error-container": "#93000a",
+                        "secondary": "#9b4500",
+                        "primary-fixed": "#acedff",
+                        "outline-variant": "#bbc9cd",
+                        "inverse-primary": "#2cd8fb",
+                        "on-background": "#161d1f",
+                        "glass-white": "rgba(255, 255, 255, 0.4)",
+                        "background": "#f4fafd",
+                        "surface-tint": "#00687a",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "stack-gap": "32px",
+                        "gutter": "24px",
+                        "container-max": "1200px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "display-hero": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-hero-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-hero": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "1", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-hero-mobile": ["40px", { "lineHeight": "1.1", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base Styles from all pages */
+        body {
+            background-color: #f4fafd;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(190, 100%, 76%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(43, 100%, 65%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(190, 100%, 76%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(43, 100%, 65%, 0.3) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Day 1 Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-line {
+            width: 4px;
+            background: linear-gradient(to bottom, #00ccee, #FFB800);
+            border-radius: 9999px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .timeline-progress {
+            width: 4px;
+            background: linear-gradient(to bottom, #00ccee, #FFB800);
+            border-radius: 9999px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 0%;
+            z-index: 0;
+            transition: height 0.3s ease-out;
+            box-shadow: 0 0 15px rgba(0, 204, 238, 0.8);
+        }
+
+        /* t-p */
+        .timeline-node {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border: 4px solid #00ccee;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0, 204, 238, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-node.active {
+            background: #00ccee;
+            border-color: white;
+            transform: translateX(-50%) scale(1.2);
+            box-shadow: 0 0 20px rgba(0, 204, 238, 0.8);
+        }
+
+        .timeline-card {
+            opacity: 0.5;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+
+            .timeline-line,
+            .timeline-progress {
+                left: 32px;
+            }
+
+            .timeline-node {
+                left: 32px;
+            }
+        }
+
+        /* Day 2 Styles */
+        .liquid-line {
+            width: 4px;
+            background: linear-gradient(to bottom, #00ccee, #FFB800, #fc7c1f);
+            border-radius: 9999px;
+        }
+        .branch-line {
+            height: 2px;
+            background: linear-gradient(to right, #00ccee, transparent);
+        }
+
+        /* Day 3 Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        /* .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 104, 122, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+        } */
+
+        .liquid-pipe {
+            background: linear-gradient(180deg, theme('colors.primary') 0%, theme('colors.primary-container') 50%, transparent 100%);
+            border-radius: 9999px;
+        }
+
+        /* TP: Tab Transition Styles */
+        .day-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .day-content.active {
+            display: contents;
+            /* Allow display to apply before opacity/transform transition */
+            animation: fadeInSlideUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-link {
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            color: theme('colors.sunset-amber');
+            border-bottom: 2px solid theme('colors.sunset-amber');
+            padding-bottom: 0.25rem;
+            transform: scale(0.95);
+        }
+        /* Footer: opaque liquid-glass treatment matching the TopNavBar */
+        .site-footer {
+            background: rgba(244, 250, 253, 0.88);
+            -webkit-backdrop-filter: blur(18px) saturate(145%);
+            backdrop-filter: blur(18px) saturate(145%);
+            border-top: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.92),
+                0 -8px 28px rgba(0, 104, 122, 0.10);
+        }
+        /* body {
+            padding-bottom: 96px;
+        }
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: 184px;
+            }
+        } */
+
+        /* ===== Music toggle button (Thai Phung) ===== */
+        .music-toggle {
+            position: fixed;
+            bottom: 44px;
+            right: 24px;
+            z-index: 60;
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, rgba(0, 204, 238, 0.70), rgba(255, 184, 0, 0.70));
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 104, 122, 0.35);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(255, 184, 0, 0.55);
+        }
+
+        .music-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* t- p: Invite attention while music is NOT playing */
+        .music-toggle.paused {
+            animation: music-hint 2s infinite;
+        }
+
+        @keyframes music-hint {
+            0% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.6); }
+            70% { box-shadow: 0 0 0 16px rgba(255, 184, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0); }
+        }
+
+        /* Equalizer bars shown while playing */
+        .eq-bars {
+            display: none;
+            align-items: flex-end;
+            gap: 4px;
+            height: 26px;
+        }
+
+        .music-toggle.playing .eq-bars {
+            display: flex;
+        }
+
+        .music-toggle.playing .music-icon {
+            display: none;
+        }
+
+        .eq-bars span {
+            width: 5px;
+            border-radius: 2px;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+            animation: eq-bounce 1s ease-in-out infinite;
+        }
+
+        .eq-bars span:nth-child(1) { animation-delay: 0s;    height: 40%; }
+        .eq-bars span:nth-child(2) { animation-delay: 0.15s; height: 75%; }
+        .eq-bars span:nth-child(3) { animation-delay: 0.3s;  height: 55%; }
+        .eq-bars span:nth-child(4) { animation-delay: 0.45s; height: 85%; }
+
+        @keyframes eq-bounce {
+            0%, 100% { transform: scaleY(0.4); }
+            50%      { transform: scaleY(1); }
+        }
+
+        /* Tooltip label */
+        .music-toggle .music-label {
+            position: absolute;
+            right: 74px;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #fff;
+            background: rgba(0, 104, 122, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            opacity: 0;
+            transform: translateX(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .music-toggle:hover .music-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 640px) {
+            .music-toggle {
+                width: 54px;
+                height: 54px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-on-background font-body-md overflow-x-hidden relative">
+    <!-- TopNavBar (Web) -->
+    <nav
+        class="hidden md:flex justify-between items-center px-gutter py-unit w-full max-w-container-max mx-auto z-50 bg-glass-white backdrop-blur-md fixed top-unit left-unit right-unit rounded-xl border border-glass-border shadow-md shadow-inset-white">
+        <div class="font-display-hero text-headline-lg text-primary tracking-tighter">
+            La Cà Lô Cồ
+        </div>
+        <div class="flex gap-stack-gap" id="nav-tabs">
+            <a class="nav-link font-label-bold hover:text-primary transition-colors duration-300 active text-sunset-amber border-b-2 border-sunset-amber pb-1 scale-95"
+                data-target="day-1">Day 1</a>
+            <a class="nav-link text-on-surface-variant font-label-bold hover:text-primary transition-colors duration-300"
+                data-target="day-2">Day 2</a>
+            <a class="nav-link text-on-surface-variant font-label-bold hover:text-primary transition-colors duration-300"
+                data-target="day-3">Day 3</a>
+        </div>
+        <div>
+            <button onclick="window.location.href='./'"
+                class="bg-gradient-to-r from-sunset-amber to-secondary-container text-white px-6 py-2.5 rounded-full font-label-bold shadow-[0_4px_15px_rgba(255,184,0,0.5)] hover:shadow-[0_8px_25px_rgba(255,184,0,0.8)] transition-all duration-300 hover:scale-105 active:scale-95 border border-white/20">
+                Home Page
+            </button>
+        </div>
+    </nav>
+    <!-- Thai Phung -->
+
+    <!-- SideNavBar (Mobile) -->
+    <nav
+        class="md:hidden flex flex-col items-center gap-unit px-2 z-40 bg-glass-white backdrop-blur-lg fixed left-unit top-1/4 h-fit rounded-full py-stack-gap border-r border-glass-border shadow-xl">
+        <div class="font-headline-md text-headline-md text-primary mb-4 text-center">
+            LC
+        </div>
+        <a class="bg-primary text-on-primary rounded-full p-unit shadow-lg shadow-primary/20 flex flex-col items-center"
+            href="#">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+        </a>
+        <a class="text-outline p-unit hover:bg-primary-container hover:text-on-primary-container rounded-full flex flex-col items-center transition-colors duration-200"
+            href="#">
+            <span class="material-symbols-outlined">luggage</span>
+        </a>
+        <a class="text-outline p-unit hover:bg-primary-container hover:text-on-primary-container rounded-full flex flex-col items-center transition-colors duration-200"
+            href="#">
+            <span class="material-symbols-outlined">contact_support</span>
+        </a>
+    </nav>
+    <main class="pt-32 pb-24 px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+        <!-- Day 1 Content -->
+        <div class="day-content active" id="day-1">
+            <header class="text-center mb-16">
+                <h1
+                    class="font-display-hero-mobile md:font-display-hero text-display-hero-mobile md:text-display-hero text-primary mb-4">
+                    Day 1: Khởi Hành</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant"><span style="color: #fc7c1f;"> 12 Tháng 9
+                        2026 </span>• Hành trình bắt đầu tại Đà Nẵng</p>
+            </header>
+            <div class="relative w-full max-w-3xl mx-auto py-12" id="timeline-container">
+                <div class="timeline-line"></div>
+                <div class="timeline-progress" id="timeline-progress"></div>
+                <!-- Milestone 1 -->
+                <div class="relative mb-24 md:flex items-center justify-between group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">06:00</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Di chuyển đến Đà Nẵng</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pl-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4 mb-2">
+                                <span class="material-symbols-outlined text-sunset-amber text-3xl">flight_takeoff</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Nasher tự túc</h4>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant text-sm">Vui lòng sắp xếp chuyến
+                                bay hoặc phương tiện cá nhân để có mặt tại Đà Nẵng đúng giờ.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Milestone 2 -->
+                <div class="relative mb-24 md:flex items-center justify-between flex-row-reverse group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-left md:pl-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">08:00</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Shuttle bus đón</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pr-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4 mb-2">
+                                <span class="material-symbols-outlined text-primary text-3xl">directions_bus</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Lịch trình đón theo khung
+                                    giờ</h4>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant text-sm">Xe bus sẽ đón tại sân
+                                bay và các điểm tập kết trung tâm.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Milestone 3 -->
+                <div class="relative mb-24 md:flex items-center justify-between group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">14:00</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Nhận phòng</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pl-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4 mb-2">
+                                <span class="material-symbols-outlined text-jungle-green text-3xl">hotel</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Trung tâm Đà Nẵng</h4>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant text-sm">Nghỉ ngơi và chuẩn bị
+                                cho các hoạt động buổi chiều.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Milestone 4 -->
+                <div class="relative mb-24 md:flex items-center justify-between flex-row-reverse group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-left md:pl-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">15:30</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Di chuyển đến Hội An</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pr-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4 mb-2">
+                                <span class="material-symbols-outlined text-primary text-3xl">local_taxi</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Cùng nhau khởi hành</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Milestone 5 -->
+                <div class="relative mb-24 md:flex items-center justify-between group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">17:00</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Ăn tối &amp; Công viên Ấn Tượng</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pl-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4 mb-2">
+                                <span
+                                    class="material-symbols-outlined text-secondary-container text-3xl">restaurant</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Thưởng thức đặc sản</h4>
+                            </div>
+                            <img class="w-full h-32 object-cover rounded-lg mt-4 mb-2"
+                                data-alt="A beautifully plated traditional Vietnamese dinner in a lively, softly lit outdoor restaurant setting in Hoi An, featuring warm golden hour lighting, vibrant fresh herbs, and a sense of communal dining, in a liquid glass modern travel app aesthetic."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaY0Sj6H7804Ewe7ktWLUiPORlzWK8VxlGUGWYWB5pXiggunR8lrQUG864MOLa8FwgiH27xMWkvO2iZO4FURWiViw5OC8kitvvjy1u3SZedtxAkr2dJYWvS-WGs8lfCgiFUtKT948XYaROYqUeG6hViVD9EKyVe8upqrQJrLujpAoz0JzIo2fjiBkcKbwUqMwOdMljOxMz2us4TMvCIGSuJpemSLpMubO45MKYpb0YtDm32nmtosO1_g" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Milestone 6 -->
+                <div class="relative mb-24 md:flex items-center justify-between flex-row-reverse group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-left md:pl-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">19:00</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Phố Cổ Hội An về đêm</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pr-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4 mb-2">
+                                <span class="material-symbols-outlined text-sunset-amber text-3xl">festival</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Trải nghiệm tự do</h4>
+                            </div>
+                            <img class="w-full h-32 object-cover rounded-lg mt-4"
+                                data-alt="A vibrant night scene in Hoi An Ancient Town, illuminated by thousands of colorful glowing silk lanterns reflecting on the river, soft focus background, creating a magical, relaxing, and energetic atmosphere suitable for a premium travel app."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR_dAsTdQUs2DbQzbct3DDALHnFpppKD4_rNDSDWIjZu2NCfAqA1tD7fJliH42Q74JfzMRoR_20mkp90ytHeC4mD7OcOKUJHFnngTv6SdihRPJF-hhQ_2RPZuFRYPABGHmeVdhwb7lXNfQOQgxqtcIcumozls9k94Fs8FDbaSpiObW7wfltkYBVuDZypQTzLi5MfdJkba1c44EAN1JsYTTr29UH8wheVpdf4hx8HEgSQIN4uf0YkbY6Q" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Milestone 7 -->
+                <div class="relative md:flex items-center justify-between group timeline-item">
+                    <div class="timeline-node top-8 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-2">21:00</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Về khách sạn</p>
+                    </div>
+                    <div class="md:w-5/12 ml-16 md:ml-0 md:pl-12 mt-4 md:mt-0">
+                        <div class="glass-panel rounded-xl p-6 timeline-card">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-outline text-3xl">bed</span>
+                                <h4 class="font-label-bold text-label-bold text-on-surface">Nghỉ ngơi</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Day 2 Content -->
+        <div class="day-content" id="day-2">
+            <header class="text-center mb-stack-gap relative z-10 pt-stack-gap">
+                <h1
+                    class="font-display-hero-mobile md:font-display-hero text-display-hero-mobile md:text-display-hero text-primary mb-2">
+                    Muôn nẻo đường, triệu cuộc vui</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto"><span style="color: #fc7c1f;"> 13 Tháng 9
+                        2026 </span> • Chọn hành trình bạn muốn chinh phục, bứt phá giới hạn và cùng nhau hội ngộ trong một đêm thật đáng nhớ.</p>
+            </header>
+            <div class="relative w-full flex flex-col items-center">
+                        <!-- Central Liquid Line -->
+                        <div class="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 liquid-line z-0"></div>
+                        <!-- Main Path: Breakfast -->
+                        <div
+                                class="relative z-10 glass-panel rounded-xl p-4 w-full md:w-2/3 max-w-2xl mb-stack-gap flex items-center gap-4 group hover:scale-[1.02] transition-transform">
+                                <div
+                                        class="w-12 h-12 rounded-full bg-sandy-gold/50 flex items-center justify-center border border-sandy-gold flex-shrink-0">
+                                        <span class="material-symbols-outlined text-tertiary"
+                                                style="font-variation-settings: 'FILL' 1;">restaurant</span>
+                                </div>
+                                <div>
+                                        <h3 class="font-headline-md text-headline-md text-primary">06:30 - Ăn Sáng 
+                                        </h3>
+                                        <p class="font-body-md text-body-md text-on-surface-variant">Nạp buffet đầy bình, sẵn sàng chiến một ngày hết mình! ⚡</p>
+                                </div>
+                        </div>
+                        <!-- Branching Section Label -->
+                        <div
+                                class="relative z-10 bg-primary text-on-primary font-label-bold text-label-bold px-6 py-2 rounded-full shadow-lg mb-stack-gap">
+                                Chọn cuộc chơi, lên đường thôi
+                        </div>
+                        <!-- Branching Paths Grid -->
+                        <div
+                                class="relative z-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-stack-gap px-4">
+                                <!-- Path A -->
+                                <div
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        <div
+                                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-jungle-green to-transparent">
+                                        </div>
+                                        <div class="flex justify-between items-start mb-4">
+                                                <div
+                                                        class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-label-bold text-on-surface-variant">
+                                                        04:30</div>
+                                                <span class="material-symbols-outlined text-jungle-green text-3xl"
+                                                        style="font-variation-settings: 'FILL' 1;">hiking</span>
+                                        </div>
+                                        <h4 class="font-headline-md text-headline-md text-primary mb-2">Path A: Trekking
+                                                Bạch Mã</h4>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">Băng rừng, vượt thử thách giữa thiên nhiên xanh ngút ngàn. ⛰️</p>
+                                        <div
+                                                class="inline-block bg-glass-white border border-glass-border px-3 py-1 rounded-full text-xs font-label-bold text-on-surface">
+                                                Extreme</div>
+                                </div>
+                                <!-- Path B -->
+                                <div
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        <div
+                                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-transparent">
+                                        </div>
+                                        <div class="flex justify-between items-start mb-4">
+                                                <div
+                                                        class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-label-bold text-on-surface-variant">
+                                                        04:30</div>
+                                                <span class="material-symbols-outlined text-primary-container text-3xl"
+                                                        style="font-variation-settings: 'FILL' 1;">surfing</span>
+                                        </div>
+                                        <h4 class="font-headline-md text-headline-md text-primary mb-2">Path B: SUP đón
+                                                bình minh</h4>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">Lên SUP, đón nắng mai, chill hết nấc! 🌅</p>
+                                        <div
+                                                class="inline-block bg-glass-white border border-glass-border px-3 py-1 rounded-full text-xs font-label-bold text-on-surface">
+                                                Moderate</div>
+                                </div>
+                                <!-- Path C -->
+                                <div
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        <div
+                                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sea-azure to-transparent">
+                                        </div>
+                                        <div class="flex justify-between items-start mb-4">
+                                                <div
+                                                        class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-label-bold text-on-surface-variant">
+                                                        07:00</div>
+                                                <span class="material-symbols-outlined text-sea-azure text-3xl"
+                                                        style="font-variation-settings: 'FILL' 1;">kayaking</span>
+                                        </div>
+                                        <h4 class="font-headline-md text-headline-md text-primary mb-2">Path C: Hòa Phú
+                                                Thành</h4>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">Vượt thác cực sung, phiêu lưu cực đã! 🌊</p>
+                                        <div
+                                                class="inline-block bg-glass-white border border-glass-border px-3 py-1 rounded-full text-xs font-label-bold text-on-surface">
+                                                High</div>
+                                </div>
+                                <!-- Path D -->
+                                <div
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        <div
+                                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-container to-transparent">
+                                        </div>
+                                        <div class="flex justify-between items-start mb-4">
+                                                <div
+                                                        class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-label-bold text-on-surface-variant">
+                                                        07:30</div>
+                                                <span class="material-symbols-outlined text-secondary-container text-3xl"
+                                                        style="font-variation-settings: 'FILL' 1;">landscape</span>
+                                        </div>
+                                        <h4 class="font-headline-md text-headline-md text-primary mb-2">Path D: Hiking
+                                                Sơn Trà</h4>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">Men theo bán đảo, thu trọn cảnh đẹp vào tầm mắt. 🖼️</p>
+                                        <div
+                                                class="inline-block bg-glass-white border border-glass-border px-3 py-1 rounded-full text-xs font-label-bold text-on-surface">
+                                                Moderate</div>
+                                </div>
+                                <!-- Path E -->
+                                <div
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        <div
+                                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tertiary-container to-transparent">
+                                        </div>
+                                        <div class="flex justify-between items-start mb-4">
+                                                <div
+                                                        class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-label-bold text-on-surface-variant">
+                                                        08:00</div>
+                                                <span class="material-symbols-outlined text-tertiary-container text-3xl"
+                                                        style="font-variation-settings: 'FILL' 1;">temple_buddhist</span>
+                                        </div>
+                                        <h4 class="font-headline-md text-headline-md text-primary mb-2">Path E: Ngũ Hành
+                                                Sơn &amp; Hội An</h4>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">hám phá Ngũ Hành Sơn, dạo bước giữa nét xưa Phố Cổ. 🏮</p>
+                                        <div
+                                                class="inline-block bg-glass-white border border-glass-border px-3 py-1 rounded-full text-xs font-label-bold text-on-surface">
+                                                Low</div>
+                                </div>
+                                <!-- Path F -->
+                                <div
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        <div
+                                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-inverse-primary to-transparent">
+                                        </div>
+                                        <div class="flex justify-between items-start mb-4">
+                                                <div
+                                                        class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-label-bold text-on-surface-variant">
+                                                        08:30</div>
+                                                <span class="material-symbols-outlined text-inverse-primary text-3xl"
+                                                        style="font-variation-settings: 'FILL' 1;">pool</span>
+                                        </div>
+                                        <h4 class="font-headline-md text-headline-md text-primary mb-2">Path F: Mikazuki
+                                        </h4>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">Chiến đủ rồi, giờ đến lúc ngâm mình chill thôi! ♨️</p>
+                                        <div
+                                                class="inline-block bg-glass-white border border-glass-border px-3 py-1 rounded-full text-xs font-label-bold text-on-surface">
+                                                Low</div>
+                                </div>
+                        </div>
+                        <!-- Convergence Section Label -->
+                        <div
+                                class="relative z-10 bg-secondary-container text-on-primary font-label-bold text-label-bold px-6 py-2 rounded-full shadow-lg mb-stack-gap mt-4">
+                                Đi muôn nơi, giờ về chung hội
+                        </div>
+                        <!-- Convergence Path -->
+                        <div class="relative z-10 flex flex-col gap-6 w-full md:w-2/3 max-w-2xl mb-stack-gap">
+                                <!-- Lunch -->
+                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4">
+                                        <div
+                                                class="w-12 h-12 rounded-full bg-primary-container/30 flex items-center justify-center border border-primary-container flex-shrink-0">
+                                                <span class="material-symbols-outlined text-on-primary-container"
+                                                        style="font-variation-settings: 'FILL' 1;">ramen_dining</span>
+                                        </div>
+                                        <div>
+                                                <h3 class="font-headline-md text-headline-md text-primary">11:30 - Ăn
+                                                        trưa tại trung tâm Đà Nẵng</h3>
+                                                <p class="font-body-md text-body-md text-on-surface-variant">Local
+                                                        delicacies to refuel.</p>
+                                        </div>
+                                </div>
+                                <!-- City Tour -->
+                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4">
+                                        <div
+                                                class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center border border-secondary-container flex-shrink-0">
+                                                <span class="material-symbols-outlined text-on-secondary-container"
+                                                        style="font-variation-settings: 'FILL' 1;">directions_bus</span>
+                                        </div>
+                                        <div>
+                                                <h3 class="font-headline-md text-headline-md text-primary">14:00 - City
+                                                        Tour</h3>
+                                                <p class="font-body-md text-body-md text-on-surface-variant">Explore the
+                                                        highlights of Da Nang together.</p>
+                                        </div>
+                                </div>
+                                <!-- Dinner -->
+                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4">
+                                        <div
+                                                class="w-12 h-12 rounded-full bg-sunset-amber/30 flex items-center justify-center border border-sunset-amber flex-shrink-0">
+                                                <span class="material-symbols-outlined text-tertiary"
+                                                        style="font-variation-settings: 'FILL' 1;">local_dining</span>
+                                        </div>
+                                        <div>
+                                                <h3 class="font-headline-md text-headline-md text-primary">18:30 - Ăn
+                                                        tối tại For U Palace</h3>
+                                                <p class="font-body-md text-body-md text-on-surface-variant">A grand
+                                                        dinner gathering.</p>
+                                        </div>
+                                </div>
+                        </div>
+                        <!-- Climax: Gala Show -->
+                        <div
+                                class="relative z-10 w-full max-w-4xl glass-panel rounded-2xl overflow-hidden mt-8 shadow-[0_10px_40px_rgba(255,184,0,0.2)] border-sunset-amber/50">
+                                <div
+                                        class="h-48 bg-gradient-to-r from-primary via-primary-container to-secondary-container relative">
+                                        <div class="absolute inset-0 bg-black/20"></div>
+                                        <div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                                                <div class="text-white">
+                                                        <div
+                                                                class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-label-bold inline-block mb-2 text-white">
+                                                                20:00 - Climax</div>
+                                                        <h2 class="font-headline-lg text-headline-lg text-white">Gala
+                                                                Show: Chill Đà Nẵng Show</h2>
+                                                        <p class="font-body-md text-body-md text-white/90">Temple Đà
+                                                                Nẵng Resort</p>
+                                                </div>
+                                                <span class="material-symbols-outlined text-sunset-amber text-6xl drop-shadow-lg"
+                                                        style="font-variation-settings: 'FILL' 1;">celebration</span>
+                                        </div>
+                                </div>
+                                <div class="p-6 flex flex-col md:flex-row gap-6 items-center">
+                                        <div class="flex-1">
+                                                <p class="font-body-lg text-body-lg text-on-surface mb-4">Khép lại hành trình bằng một đêm thật bùng nổ: bia luôn đầy ly, nhạc live hết cỡ và đại tiệc ánh sáng rực rỡ bên biển. Cùng nâng ly cho những chiến tích vừa chinh phục! 🍻</p>
+                                                <div class="flex gap-3">
+                                                        <span
+                                                                class="px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
+                                                                        class="material-symbols-outlined text-sm">sports_bar</span>
+                                                                Beer</span>
+                                                        <span
+                                                                class="px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
+                                                                        class="material-symbols-outlined text-sm">music_note</span>
+                                                                Music</span>
+                                                        <span
+                                                                class="px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
+                                                                        class="material-symbols-outlined text-sm">lightbulb</span>
+                                                                Light Show</span>
+                                                </div>
+                                        </div>
+                                        <div
+                                                class="w-full md:w-1/3 aspect-video rounded-xl bg-surface-container-highest overflow-hidden relative">
+                                                <div class="bg-cover bg-center w-full h-full"
+                                                        data-alt="A vibrant, high-energy beach party at night, illuminated by neon lights and a laser show, with a large crowd enjoying music and drinks under a starry sky. The scene is festive, colorful, and embodies a premium travel experience in Da Nang, capturing the 'thảnh thơi' vibe with glassmorphism UI elements floating subtly."
+                                                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_wM20vL06ccSHiInywrewYZ45w9kVijap20qm-tGfUMBwLh1DrFK1uBToniqXPtQ5BEr1-CiG773hlxjNMRxmiweiT_6BPxc3zjwnP476KUD6bZyQELfp6xgjMGcp76Pt-0dLIcLYt3dmNPmbWjkNz50feS_uHg8_50EhYX9LKsCY9X7fVlcR6hj4H6Xr6KwQXX98ILZJyZQe7xEmezUbfI3Ohvu6i7hk6ggcB1rDWj3YLM9zpZakPw')">
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+        <!-- Day 3 Content -->
+        <div class="day-content relative" id="day-3">
+            <header class="text-center mb-stack-gap md:mb-[64px] relative z-10">
+                <h1
+                    class="font-display-hero-mobile md:font-display-hero text-display-hero-mobile md:text-display-hero text-primary mb-4 drop-shadow-sm">
+                    Ngày 3: Tạm Biệt &amp; Ký Ức</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">14 Tháng 9, 2026 • Khép
+                    lại hành trình thảnh thơi tại Đà Nẵng với những khoảnh khắc rực rỡ nhất.</p>
+            </header>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter relative">
+                <!-- Itinerary Timeline (Left Column) -->
+                <div class="lg:col-span-5 relative">
+                    <!-- The Liquid Pipe -->
+                    <div class="absolute left-[23px] top-[24px] bottom-0 w-2 liquid-pipe z-0 hidden sm:block"></div>
+                    <div class="space-y-stack-gap relative z-10">
+                        <!-- Timeline Item 1 -->
+                        <div class="flex gap-4 items-start group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-glass-white backdrop-blur-md border border-glass-border shadow-inset-white flex items-center justify-center shrink-0 mt-2 z-10 relative">
+                                <span class="material-symbols-outlined text-sunset-amber">restaurant</span>
+                                <div
+                                    class="absolute inset-0 rounded-full bg-sunset-amber/20 blur-md -z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+                            </div>
+                            <div
+                                class="glass-card rounded-xl p-6 flex-1 hover:-translate-y-1 transition-transform duration-300">
+                                <div class="font-label-bold text-label-bold text-primary mb-2">06:30</div>
+                                <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Ăn sáng tại khách sạn
+                                </h3>
+                                <p class="text-on-surface-variant">Thưởng thức bữa sáng buffet nhẹ nhàng, nạp năng lượng
+                                    cho buổi sáng cuối cùng tại thành phố biển.</p>
+                            </div>
+                        </div>
+                        <!-- Timeline Item 2 -->
+                        <div class="flex gap-4 items-start group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-glass-white backdrop-blur-md border border-glass-border shadow-inset-white flex items-center justify-center shrink-0 mt-2 z-10 relative">
+                                <span class="material-symbols-outlined text-primary">photo_camera</span>
+                                <div
+                                    class="absolute inset-0 rounded-full bg-primary/30 blur-md -z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+                            </div>
+                            <div
+                                class="glass-card rounded-xl p-6 flex-1 hover:-translate-y-1 transition-transform duration-300">
+                                <div class="font-label-bold text-label-bold text-primary mb-2">11:00</div>
+                                <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Checkout &amp; Lưu
+                                    giữ khoảnh khắc</h3>
+                                <p class="text-on-surface-variant">Thu dọn hành lý và tranh thủ chụp những bức ảnh kỷ
+                                    niệm cùng đồng đội trước khi rời khách sạn.</p>
+                            </div>
+                        </div>
+                        <!-- Timeline Item 3 (Heart End) -->
+                        <div class="flex gap-4 items-start group pb-8 relative">
+                            <!-- Path line ends in heart -->
+                            <!-- <div
+                                class="absolute left-[19px] bottom-[-20px] text-error bg-surface rounded-full z-20 hidden sm:block">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1; font-size: 32px;">favorite</span>
+                            </div> -->
+                            <div
+                                class="w-12 h-12 rounded-full bg-glass-white backdrop-blur-md border border-glass-border shadow-inset-white flex items-center justify-center shrink-0 mt-2 z-10 relative">
+                                <span class="material-symbols-outlined text-error">flight_takeoff</span>
+                                <div
+                                    class="absolute inset-0 rounded-full bg-error/20 blur-md -z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+                            </div>
+                            <div
+                                class="glass-card rounded-xl p-6 flex-1 hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-error">
+                                <div class="font-label-bold text-label-bold text-error mb-2">12:00</div>
+                                <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Kết thúc chương trình
+                                </h3>
+                                <p class="text-on-surface-variant">Tạm biệt Đà Nẵng. Hẹn gặp lại những người anh em
+                                    Nashers trong những hành trình tiếp theo!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Special Sections (Right Column) Bento Grid -->
+                <div class="lg:col-span-7 flex flex-col gap-gutter">
+                    <!-- Group 6 Highlight -->
+                    <div class="glass-card rounded-3xl p-6 md:p-8 overflow-hidden relative group h-[400px]">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            data-alt="A breathtaking dawn view over the ocean with a group of people gently paddling on SUP boards. The water is calm and reflects the vibrant oranges, pinks, and purples of the sunrise. The scene is shot with a liquid glass aesthetic, featuring high gloss, subtle motion blur, and a dreamy, nostalgic vacation vibe. The lighting is ethereal and uplifting."
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiexCeodmlZi1SsJObx5limCXnV_2_NoBhBvyVbDfVo8Noj3jvpHeMmTmSco6SHxrt5HAf1mU-1X77g7EM3nhNTh_gcrfAatmlm31yw1psyGo-iGIVJ0kjLjwPOzt-FMPP4AgmY2ZJO-8h22dInrITMdXEu2llNhSsa8s0AsE9VQcmeus3Hgb92PJH6xbg111q32NNEIUpbBqPUM-xdXrN2ZDdCBKpij2vVR0cPpqVa6oHcAUytYHK-g')">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-on-primary-fixed/80 via-on-primary-fixed/30 to-transparent">
+                        </div>
+                        <div class="relative z-10 h-full flex flex-col justify-end">
+                            <span
+                                class="bg-glass-white/30 backdrop-blur-md border border-glass-border text-on-primary px-3 py-1 rounded-full font-label-bold text-label-bold w-fit mb-4">Góc
+                                Phá Đảo</span>
+                            <h2 class="font-headline-lg text-headline-lg text-on-primary mb-2 drop-shadow-md">Group 6 -
+                                SUP đón bình minh</h2>
+                            <p class="font-body-md text-body-md text-on-primary/90 max-w-md">Những tay chèo khét lẹt
+                                nhất đã thức dậy từ 4:30 AM để bắt trọn khoảnh khắc mặt trời ngoi lên từ mặt biển. Một
+                                buổi sáng chill hết nấc!</p>
+                        </div>
+                    </div>
+                    <!-- Gala Highlights Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                        <div
+                            class="glass-card rounded-3xl p-6 flex flex-col justify-between aspect-square relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110 opacity-60 mix-blend-overlay"
+                                data-alt="A lively evening gala scene on a beach, illuminated by soft string lights and a glowing stage. Silhouettes of people are raising glasses and dancing. The visual style is liquid glass, with deep background blurs, glowing cyan and sunset orange accents, capturing a premium, high-energy yet relaxed 'chill' party atmosphere."
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAC9b92xh1kCpHhldzVJjAomcFG5doAyys5hLkJBWxLyTPWJ2n99Z--Hf_tf4EmBQGRSBqwbCFA_jxGeAXmbXFxhEDHlhcGwa1HDYXQ486yHfW4irHMsoJ1xZ1q3VcZDhCSqj0ZE39QCIEL8aIOy-tyFTnIRaw6DY64DNKLCTWDiq4vidBXLnhPLqIKXziPhH0aZt8_ny8Huxm70Y5cxc0pMRgVtJrDfO_HdNLl5ifetKQb7ZmlBnme4g')">
+                            </div>
+                            <h3 class="font-headline-md text-headline-md text-primary relative z-10">Chill Đà Nẵng Show
+                            </h3>
+                            <p class="text-on-surface-variant relative z-10 mt-auto">Những màn trình diễn bùng nổ đêm
+                                qua vẫn còn dư âm.</p>
+                        </div>
+                        <div
+                            class="glass-card rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary/10 to-primary-container/20">
+                            <span class="material-symbols-outlined text-[64px] text-primary mb-4"
+                                style="font-variation-settings: 'FILL' 1;">celebration</span>
+                            <h3 class="font-headline-md text-headline-md text-primary mb-2">Nashers Đồng Chill</h3>
+                            <p class="font-label-bold text-label-bold text-sunset-amber italic text-lg">"La Cà là
+                                dzuiiiii!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->    
+    <footer
+        class="site-footer relative inset-x-0 bottom-0 z-50 w-full py-5 px-margin-mobile md:px-gutter flex flex-col md:flex-row justify-between items-center gap-4 bg-glass-white backdrop-blur-md rounded-xl border border-glass-border shadow-inset-white">
+        <div class="font-headline-md text-headline-md text-primary tracking-tighter">
+            La Cà Lô Cồ
+        </div>
+        <!-- t- p -->
+        <div class="text-primary font-body-md text-body-md text-center md:text-left">
+            © 2026 Thai Phung - Nashers Đồng Chill: Season 2. Stay Local, Stay Chill.
+        </div>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <a class="text-on-surface-variant font-label-bold text-label-bold hover:text-sunset-amber transition-all duration-300 hover:scale-105"
+                href="#">Facebook</a>
+            <a class="text-on-surface-variant font-label-bold text-label-bold hover:text-sunset-amber transition-all duration-300 hover:scale-105"
+                href="#">Instagram</a>
+            <a class="text-on-surface-variant font-label-bold text-label-bold hover:text-sunset-amber transition-all duration-300 hover:scale-105"
+                href="#">TikTok</a>
+            <a class="text-on-surface-variant font-label-bold text-label-bold hover:text-sunset-amber transition-all duration-300 hover:scale-105"
+                href="#">Contact Us</a>
+        </div>
+    </footer>
+
+    <!-- ===== Background music + toggle button: music/wave.mp3 (Thai Phung) ===== -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="music/wave.mp3" type="audio/mpeg" />
+    </audio>
+    <button id="music-toggle" class="music-toggle paused" type="button"
+        aria-label="Play background music" aria-pressed="false">
+        <span class="music-label">Chill music</span>
+        <span aria-hidden="true" class="material-symbols-outlined music-icon" style="font-size:30px;">volume_up</span>
+        <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    </button>
+    <!-- <footer
+        class="relative w-full mt-stack-gap border-t border-outline-variant bg-surface-container-highest dark:bg-inverse-surface">
+        <div class="flex flex-col md:flex-row justify-between items-center p-gutter max-w-container-max mx-auto">
+            <div class="font-headline-md text-headline-md text-on-surface mb-4 md:mb-0">
+                La Cà Lô Cồ
+            </div>
+            <div class="font-body-md text-body-md text-primary mb-4 md:mb-0 text-center">
+                © 2024 Nashers Đồng Chill - Season 2. Stay Local, Stay Chill.
+            </div>
+            <div class="flex gap-4">
+                <a class="text-on-surface-variant hover:text-sea-azure underline transition-all" href="#">Facebook</a>
+                <a class="text-on-surface-variant hover:text-sea-azure underline transition-all" href="#">Instagram</a>
+                <a class="text-on-surface-variant hover:text-sea-azure underline transition-all" href="#">Itinerary
+                    PDF</a>
+            </div>
+        </div>
+    </footer> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab Navigation Logic
+            const navLinks = document.querySelectorAll('.nav-link');
+            const dayContents = document.querySelectorAll('.day-content');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Remove active class from all links and contents
+                    navLinks.forEach(l => {
+                        l.classList.remove('active');
+                        l.classList.add('text-on-surface-variant');
+                        l.classList.remove('text-sunset-amber', 'border-b-2', 'border-sunset-amber', 'pb-1', 'scale-95');
+                    });
+                    dayContents.forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked link
+                    const targetId = link.getAttribute('data-target');
+                    link.classList.add('active', 'text-sunset-amber', 'border-b-2', 'border-sunset-amber', 'pb-1', 'scale-95');
+                    link.classList.remove('text-on-surface-variant');
+
+                    // Show target content
+                    document.getElementById(targetId).classList.add('active');
+
+                    // Re-trigger scroll event to update timeline if day-1 is shown
+                    if (targetId === 'day-1') {
+                        updateTimeline();
+                    }
+                });
+            });
+
+            // Timeline scroll logic (for Day 1)
+            const timelineContainer = document.getElementById('timeline-container');
+            const timelineLine = timelineContainer.querySelector('.timeline-line');
+            const timelineProgress = document.getElementById('timeline-progress');
+            const timelineItems = [...timelineContainer.querySelectorAll('.timeline-item')];
+
+            let ticking = false;
+            let nodePositions = [];
+            let firstNodeY = 0;
+            let lastNodeY = 0;
+
+            // Keep the trigger useful on very tall portrait screens. A raw 75vh
+            // activates too many milestones before the user has scrolled.
+            function getTriggerOffset() {
+                return Math.min(Math.max(window.innerHeight * 0.42, 220), 520);
+            }
+
+            function measureTimeline() {
+                const containerRect = timelineContainer.getBoundingClientRect();
+
+                nodePositions = timelineItems.map((item) => {
+                    const node = item.querySelector('.timeline-node');
+                    const rect = node.getBoundingClientRect();
+                    return rect.top - containerRect.top + rect.height / 2;
+                });
+
+                firstNodeY = nodePositions[0] ?? 0;
+                lastNodeY = nodePositions.at(-1) ?? firstNodeY;
+
+                // The visual track now starts at node 1 and ends exactly at node N,
+                // rather than using the padded height of the whole container.
+                timelineLine.style.top = `${firstNodeY}px`;
+                timelineLine.style.height = `${Math.max(0, lastNodeY - firstNodeY)}px`;
+                timelineProgress.style.top = `${firstNodeY}px`;
+
+                updateTimelineNow();
+            }
+
+            function updateTimelineNow() {
+                ticking = false;
+                if (!nodePositions.length) return;
+
+                const containerRect = timelineContainer.getBoundingClientRect();
+                const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+                const atPageBottom = window.scrollY >= maxScrollY - 2;
+
+                // Playhead in the timeline's local coordinate system.
+                // At the physical bottom of the page, force it to the final node,
+                // because the final node may never be able to reach the viewport trigger.
+                let playheadY = getTriggerOffset() - containerRect.top;
+                if (atPageBottom) playheadY = lastNodeY;
+                playheadY = Math.max(firstNodeY, Math.min(lastNodeY, playheadY));
+
+                timelineProgress.style.height = `${Math.max(0, playheadY - firstNodeY)}px`;
+
+                timelineItems.forEach((item, index) => {
+                    const reached = nodePositions[index] <= playheadY + 1;
+                    item.querySelector('.timeline-node')?.classList.toggle('active', reached);
+                    item.querySelector('.timeline-card')?.classList.toggle('visible', reached);
+                });
+            }
+
+            function requestUpdate() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(updateTimelineNow);
+            }
+
+            window.addEventListener('scroll', requestUpdate, { passive: true });
+            window.addEventListener('resize', measureTimeline);
+            window.addEventListener('orientationchange', measureTimeline);
+
+            // Re-measure when cards/images/fonts change the item heights.
+            const resizeObserver = new ResizeObserver(measureTimeline);
+            resizeObserver.observe(timelineContainer);
+            timelineContainer.querySelectorAll('img').forEach((img) => {
+                if (!img.complete) img.addEventListener('load', measureTimeline, { once: true });
+            });
+            document.fonts?.ready.then(measureTimeline);
+
+            measureTimeline();
+        });
+    </script>
+    <script>
+        (function () {
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            if (!audio || !btn) return;
+
+            const SRC = 'music/wave.mp3';
+            let blobTried = false;
+
+            function render() {
+                const playing = !audio.paused;
+                btn.classList.toggle('playing', playing);
+                btn.classList.toggle('paused', !playing);
+                btn.setAttribute('aria-pressed', String(playing));
+                btn.setAttribute('aria-label', playing ? 'Stop background music' : 'Play background music');
+                btn.querySelector('.music-icon').textContent = playing ? 'volume_up' : 'volume_off';
+                btn.querySelector('.music-label').textContent = playing ? 'Đang phát nhạc' : 'Nghe nhạc chill';
+            }
+
+            // Thai phung
+            function playMusic() {
+                return audio.play().then(() => {
+                    render();
+                    removeUnlock(); // stop listening once we've successfully started
+                }).catch(() => {
+                    render(); // still blocked — keep the pulsing hint visible
+                });
+            }
+
+            function pauseMusic() {
+                audio.pause();
+                render();
+            }
+
+            // Some browsers (notably Chromium over file://) cannot stream local
+            // mp3 files directly. Fallback: fetch the file as a Blob and play it.
+            function loadViaBlob() {
+                if (blobTried) return;
+                blobTried = true;
+                fetch(SRC)
+                    .then((r) => {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.blob();
+                    })
+                    .then((b) => {
+                        audio.src = URL.createObjectURL(b);
+                        audio.load();
+                        playMusic();
+                    })
+                    .catch(() => { blobTried = false; });
+            }
+
+            // If metadata never arrives shortly after load, switch to the blob.
+            audio.addEventListener('loadedmetadata', () => {
+                // Native streaming works — nothing to do.
+            }, { once: true });
+            setTimeout(() => {
+                if (audio.readyState === 0 && audio.networkState !== 1) loadViaBlob();
+            }, 2000);
+            audio.addEventListener('error', () => loadViaBlob(), { once: true });
+
+            // t -p: Toggle button handles both manual control and the autoplay fallback:
+            // if autoplay is blocked, the button pulses and the user can start
+            // music with a single click / tap / Enter / Space.
+            btn.addEventListener('click', () => {
+                if (audio.readyState === 0 && !blobTried) { loadViaBlob(); return; }
+                if (audio.ended) audio.currentTime = 0;
+                audio.paused ? playMusic() : pauseMusic();
+            });
+
+            // Reflect natural audio events (e.g. blocked load, errors) in the UI.
+            audio.addEventListener('play', render);
+            audio.addEventListener('pause', render);
+
+            // Autoplay attempt: only fires on gestures that browsers accept as
+            // "user activation" (click / keydown / touchend — NOT mousemove).
+            function unlockAndPlay(e) {
+                if (e && e.isTrusted === false) return;
+                // Let the toggle button handle its own clicks (avoids the
+                // capture listener playing, then the button handler pausing).
+                // Note: e.target is often an inner span, not the button itself.
+                if (e && e.target && btn.contains(e.target)) return;
+                playMusic();
+            }
+            function removeUnlock() {
+                ['click', 'keydown', 'touchend'].forEach((evt) =>
+                    window.removeEventListener(evt, unlockAndPlay, true)
+                );
+            }
+            function armUnlock() {
+                ['click', 'keydown', 'touchend'].forEach((evt) =>
+                    window.addEventListener(evt, unlockAndPlay, { capture: true, passive: true })
+                );
+            }
+
+            // Try autoplay right away (works if the browser allows it).
+            audio.muted = false;
+            audio.volume = 0.7;
+            audio.play().then(render).catch(render);
+            armUnlock(); // any first real gesture starts playback
+        })();
+    </script>
+</body>
+
+</html>
