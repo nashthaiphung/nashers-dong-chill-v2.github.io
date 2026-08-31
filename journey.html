@@ -486,6 +486,134 @@
             }
         }
 
+        /* === Home Control — nút trở về trang chủ (./) dạng icon button, đặt ở góc dưới-trái, ngay trên nút Music.
+           Animation hover tái dùng bộ keyframes của nút Author (wiggle icon, shine sweep, jump khi bấm) nhưng
+           kích thước (58px) và bo góc (22px) đồng bộ với .music-trigger. Không có submenu: chỉ là link <a>. */
+        .home-control {
+            position: fixed;
+            left: 18px;
+            bottom: 90px;
+            z-index: 110
+        }
+
+        /* TP: nền đặc gradient teal đồng bộ .music-trigger (nằm thẳng cột ngay dưới) thay vì kính trắng mờ —
+           trên nền trời xanh nhạt của các chapter, glass mờ gần như vô hình; khối màu đặc + shadow phát sáng
+           giúp nút nổi bật ngay lập tức. Chữ/icon trắng thêm text-shadow nhẹ để giữ tương phản trên mọi nền. */
+        .home-trigger {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 58px;
+            border-radius: 22px;
+            padding: 0 15px;
+            border: 1px solid rgba(255, 255, 255, .85);
+            background: linear-gradient(145deg, #00788d, #00bad8);
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 10px 26px rgba(0, 188, 220, .42), 0 0 0 4px rgba(44, 216, 251, .16);
+            -webkit-tap-highlight-color: transparent;
+            transition: background .32s ease, box-shadow .32s ease, transform .2s ease
+        }
+
+        .home-trigger .material-symbols-outlined {
+            font-size: 28px;
+            flex: 0 0 auto;
+            font-variation-settings: 'FILL' 1, 'wght' 550, 'GRAD' 0, 'opsz' 24;
+            transition: transform .2s ease
+        }
+
+        .home-trigger .home-text {
+            display: inline-block;
+            max-width: 0;
+            margin-left: 0;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .01em;
+            text-shadow: 0 1px 3px rgba(0, 42, 60, .35);
+            transition: max-width .38s cubic-bezier(.4, 0, .2, 1), opacity .28s ease, margin-left .38s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        /* Tia sáng lướt qua mặt kính khi hover — cùng cơ chế :after của .author-trigger */
+        .home-trigger:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 34%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255, 255, 255, .75), transparent);
+            transform: skewX(-18deg);
+            opacity: 0;
+            pointer-events: none
+        }
+
+        /* Hover: nhấc nhẹ + sáng gradient lên (cùng hành vi với .music-trigger:hover scale), đổi tông teal thay vì
+           cam — chữ trắng trên nền cam mờ tương phản kém; giữ hiệu ứng shine/wiggle của Author. */
+        .home-trigger:hover,
+        .home-trigger:focus-visible {
+            background: linear-gradient(145deg, #008fa8, #14cbe8);
+            box-shadow: 0 14px 32px rgba(0, 188, 220, .5), 0 0 0 6px rgba(44, 216, 251, .22);
+            transform: translateY(-2px);
+            outline: 0
+        }
+
+        .home-trigger:active {
+            transform: scale(.94)
+        }
+
+        .home-trigger:hover .home-text,
+        .home-trigger:focus-visible .home-text {
+            max-width: 160px;
+            opacity: 1;
+            margin-left: 10px
+        }
+
+        .home-trigger:hover .material-symbols-outlined,
+        .home-trigger:focus-visible .material-symbols-outlined {
+            animation: authorWiggle .55s ease-in-out
+        }
+
+        .home-trigger:hover:after,
+        .home-trigger:focus-visible:after {
+            animation: authorShine .9s ease
+        }
+
+        .home-trigger:active .material-symbols-outlined {
+            animation: authorJump .42s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            .home-trigger,
+            .home-trigger .home-text,
+            .home-trigger .material-symbols-outlined {
+                transition: none !important
+            }
+
+            .home-trigger:hover .material-symbols-outlined,
+            .home-trigger:active .material-symbols-outlined,
+            .home-trigger:hover:after {
+                animation: none !important
+            }
+        }
+
+        @media(max-width:520px) {
+            .home-control {
+                left: 12px;
+                bottom: 84px
+            }
+
+            .home-trigger:hover .home-text,
+            .home-trigger:focus-visible .home-text {
+                max-width: 130px
+            }
+        }
+
         /* Nút lọc hoạt động: mỗi nút một màu tươi sáng theo ý nghĩa, trạng thái active nổi bật rõ */
         .filter {
             --fc: var(--blue);
@@ -1652,6 +1780,10 @@
                         class="material-symbols-outlined">skip_next</span></button></div>
         </div>
         <audio id="home-audio" preload="none"></audio>
+    </div>
+    <div class="home-control">
+        <a class="home-trigger" href="./" aria-label="Trở về trang chủ"><span
+                class="material-symbols-outlined">home</span><span class="home-text">Home page</span></a>
     </div>
     <div class="author-control">
         <button class="author-trigger" type="button" aria-label="Thông tin tác giả"><span

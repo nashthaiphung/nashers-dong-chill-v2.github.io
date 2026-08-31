@@ -276,6 +276,114 @@
             opacity: 1;
             margin-left: 8px;
         }
+
+        /* =========================================
+          HOME BUTTON (icon-only -> full) - THAI PHUNG
+          ========================================= */
+        .home-badge {
+            position: fixed;
+            bottom: 94px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px;
+            border-radius: 50px;
+            color: #f8fafc;
+            font-size: 0.85rem;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        /* Tia sáng lướt qua khi hover */
+        .home-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+            pointer-events: none;
+        }
+
+        .home-badge:hover,
+        .home-badge:focus-visible {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 12px 32px rgba(2, 132, 199, 0.35);
+            border-color: #38bdf8;
+            transform: translateY(4px);
+            padding-right: 16px;
+            outline: none;
+        }
+
+        .home-badge:hover::after,
+        .home-badge:focus-visible::after {
+            left: 200%;
+        }
+
+        .home-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .home-badge:hover .home-avatar,
+        .home-badge:focus-visible .home-avatar {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        /* Chữ ẩn, chỉ hiện ra khi hover */
+        .home-label {
+            display: inline-block;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .home-badge:hover .home-label,
+        .home-badge:focus-visible .home-label {
+            max-width: 200px;
+            opacity: 1;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .home-badge { top: 12px; right: 12px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .home-badge, .home-avatar, .home-label { transition: none; }
+            .home-badge:hover { transform: none; }
+            .home-badge:hover::after { left: -150%; }
+            .home-badge:hover .home-avatar { transform: none; }
+        }
     </style>
 
     <style>
@@ -1024,6 +1132,15 @@ async function toggleRoute() {
     }
 }
 </script>
+<!-- HOME BUTTON COMPONENT -->
+<!-- Thai Phung - 2026 -->
+<a class="home-badge" href="./" aria-label="Về trang chủ" title="Home page">
+    <span class="home-avatar">
+        <i class="fa-solid fa-house" aria-hidden="true"></i>
+    </span>
+    <span class="home-label">Home page</span>
+</a>
+
 <!-- AUTHOR BADGE COMPONENT -->
 <!-- Thai Phung - 2026 -->
 <div class="author-badge">
