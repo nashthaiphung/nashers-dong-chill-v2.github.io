@@ -206,10 +206,169 @@
             width: 4px;
             background: linear-gradient(to bottom, #00ccee, #FFB800, #fc7c1f);
             border-radius: 9999px;
+            /* TP: dimmed track — the .liquid-progress overlay reveals the colors as you scroll */
+            opacity: 0.3;
+        }
+
+        /* TP: Day 2 scroll progress line (same behavior as Day 1 timeline-progress):
+           full-height overlay revealed top-down via clip-path so the gradient
+           colors appear progressively — scroll down to fill, scroll up to recede. */
+        .liquid-progress {
+            width: 4px;
+            background: linear-gradient(to bottom, #00ccee, #FFB800, #fc7c1f);
+            border-radius: 9999px;
+            box-shadow: 0 0 15px rgba(0, 204, 238, 0.8);
+            clip-path: inset(0 0 100% 0 round 9999px);
+            transition: clip-path 0.3s ease-out;
+            will-change: clip-path;
         }
         .branch-line {
             height: 2px;
             background: linear-gradient(to right, #00ccee, transparent);
+        }
+
+        /* TP: Convergence cards — hover lift + per-icon micro animations */
+        .conv-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+
+        .conv-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(0, 104, 122, 0.18), inset 0 0 10px rgba(255, 255, 255, 0.6);
+        }
+
+        .conv-card:hover .conv-icon {
+            background-color: rgba(255, 255, 255, 0.75);
+        }
+
+        .conv-icon {
+            transition: background-color 0.3s ease;
+        }
+
+        /* ramen_dining: shake / wiggle */
+        @keyframes icon-shake {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            15% {
+                transform: rotate(-14deg);
+            }
+
+            30% {
+                transform: rotate(12deg);
+            }
+
+            45% {
+                transform: rotate(-10deg);
+            }
+
+            60% {
+                transform: rotate(8deg);
+            }
+
+            75% {
+                transform: rotate(-5deg);
+            }
+        }
+
+        .conv-card:hover .icon-ramen {
+            animation: icon-shake 0.7s ease-in-out infinite;
+        }
+
+        .breakfast:hover .material-symbols-outlined {
+            animation: icon-shake 0.7s ease-in-out infinite;
+        }
+
+        /* directions_bus: bounce (nhún lên xuống như xe chạy) */
+        @keyframes icon-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-8px);
+            }
+
+            50% {
+                transform: translateY(0);
+            }
+
+            70% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .conv-card:hover .icon-bus {
+            animation: icon-bounce 0.6s ease infinite;
+        }
+
+        /* local_dining: jump (nhảy lên kèm xoay nhẹ) */
+        @keyframes icon-jump {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            30% {
+                transform: translateY(-12px) scale(1.15) rotate(-8deg);
+            }
+
+            50% {
+                transform: translateY(0) scale(0.95);
+            }
+
+            65% {
+                transform: translateY(-6px) scale(1.05) rotate(6deg);
+            }
+
+            80% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .conv-card:hover .icon-dinner {
+            animation: icon-jump 0.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+        }
+
+        /* TP: Gala card — hover lift + celebration icon jump + image zoom (like Day 3) */
+        .gala-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+
+        .gala-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 18px 48px rgba(255, 184, 0, 0.35), inset 0 0 10px rgba(255, 255, 255, 0.6);
+        }
+
+        .gala-card:hover .icon-gala {
+            animation: icon-jump 0.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+        }
+
+        /* TP: Branching path cards — same jump effect on their icons when hovering */
+        .path-card:hover .material-symbols-outlined {
+            animation: icon-jump 0.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+        }
+
+        /* Gala info chips */
+        .gala-chip {
+            transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+            cursor: pointer;
+        }
+
+        .gala-chip:hover {
+            transform: translateY(-3px) scale(1.08);
+            background-color: #00687a;
+            color: #ffffff;
+        }
+
+        .gala-chip:hover .material-symbols-outlined {
+            color: #FFB800;
         }
 
         /* Day 3 Styles */
@@ -409,11 +568,11 @@
         </div>
         <div class="flex gap-stack-gap" id="nav-tabs">
             <a class="nav-link font-label-bold hover:text-primary transition-colors duration-300 active text-sunset-amber border-b-2 border-sunset-amber pb-1 scale-95"
-                data-target="day-1">Day 1</a>
+                data-target="day-1">Ngày 1</a>
             <a class="nav-link text-on-surface-variant font-label-bold hover:text-primary transition-colors duration-300"
-                data-target="day-2">Day 2</a>
+                data-target="day-2">Ngày 2</a>
             <a class="nav-link text-on-surface-variant font-label-bold hover:text-primary transition-colors duration-300"
-                data-target="day-3">Day 3</a>
+                data-target="day-3">Ngày 3</a>
         </div>
         <div>
             <button onclick="window.location.href='./'"
@@ -596,9 +755,11 @@
             <div class="relative w-full flex flex-col items-center">
                         <!-- Central Liquid Line -->
                         <div class="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 liquid-line z-0"></div>
+                        <!-- TP: scroll progress overlay for the Central Liquid Line -->
+                        <div class="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 liquid-progress z-0" id="liquid-progress"></div>
                         <!-- Main Path: Breakfast -->
                         <div
-                                class="relative z-10 glass-panel rounded-xl p-4 w-full md:w-2/3 max-w-2xl mb-stack-gap flex items-center gap-4 group hover:scale-[1.02] transition-transform">
+                                class="relative z-10 glass-panel rounded-xl p-4 w-full md:w-2/3 max-w-2xl mb-stack-gap flex items-center gap-4 group hover:scale-[1.02] transition-transform breakfast">
                                 <div
                                         class="w-12 h-12 rounded-full bg-sandy-gold/50 flex items-center justify-center border border-sandy-gold flex-shrink-0">
                                         <span class="material-symbols-outlined text-tertiary"
@@ -620,7 +781,7 @@
                                 class="relative z-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-stack-gap px-4">
                                 <!-- Path A -->
                                 <div
-                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 path-card">
                                         <div
                                                 class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-jungle-green to-transparent">
                                         </div>
@@ -640,7 +801,7 @@
                                 </div>
                                 <!-- Path B -->
                                 <div
-                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 path-card">
                                         <div
                                                 class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-transparent">
                                         </div>
@@ -660,7 +821,7 @@
                                 </div>
                                 <!-- Path C -->
                                 <div
-                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 path-card">
                                         <div
                                                 class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sea-azure to-transparent">
                                         </div>
@@ -680,7 +841,7 @@
                                 </div>
                                 <!-- Path D -->
                                 <div
-                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 path-card">
                                         <div
                                                 class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-container to-transparent">
                                         </div>
@@ -700,7 +861,7 @@
                                 </div>
                                 <!-- Path E -->
                                 <div
-                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 path-card">
                                         <div
                                                 class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tertiary-container to-transparent">
                                         </div>
@@ -720,7 +881,7 @@
                                 </div>
                                 <!-- Path F -->
                                 <div
-                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+                                        class="glass-panel rounded-xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 path-card">
                                         <div
                                                 class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-inverse-primary to-transparent">
                                         </div>
@@ -747,10 +908,10 @@
                         <!-- Convergence Path -->
                         <div class="relative z-10 flex flex-col gap-6 w-full md:w-2/3 max-w-2xl mb-stack-gap">
                                 <!-- Lunch -->
-                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4">
+                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4 conv-card cursor-pointer">
                                         <div
-                                                class="w-12 h-12 rounded-full bg-primary-container/30 flex items-center justify-center border border-primary-container flex-shrink-0">
-                                                <span class="material-symbols-outlined text-on-primary-container"
+                                                class="conv-icon w-12 h-12 rounded-full bg-primary-container/30 flex items-center justify-center border border-primary-container flex-shrink-0">
+                                                <span class="material-symbols-outlined text-on-primary-container icon-ramen"
                                                         style="font-variation-settings: 'FILL' 1;">ramen_dining</span>
                                         </div>
                                         <div>
@@ -760,10 +921,10 @@
                                         </div>
                                 </div>
                                 <!-- City Tour -->
-                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4">
+                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4 conv-card cursor-pointer">
                                         <div
-                                                class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center border border-secondary-container flex-shrink-0">
-                                                <span class="material-symbols-outlined text-on-secondary-container"
+                                                class="conv-icon w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center border border-secondary-container flex-shrink-0">
+                                                <span class="material-symbols-outlined text-on-secondary-container icon-bus"
                                                         style="font-variation-settings: 'FILL' 1;">directions_bus</span>
                                         </div>
                                         <div>
@@ -773,10 +934,10 @@
                                         </div>
                                 </div>
                                 <!-- Dinner -->
-                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4">
+                                <div class="glass-panel rounded-xl p-4 flex items-center gap-4 conv-card cursor-pointer">
                                         <div
-                                                class="w-12 h-12 rounded-full bg-sunset-amber/30 flex items-center justify-center border border-sunset-amber flex-shrink-0">
-                                                <span class="material-symbols-outlined text-tertiary"
+                                                class="conv-icon w-12 h-12 rounded-full bg-sunset-amber/30 flex items-center justify-center border border-sunset-amber flex-shrink-0">
+                                                <span class="material-symbols-outlined text-tertiary icon-dinner"
                                                         style="font-variation-settings: 'FILL' 1;">local_dining</span>
                                         </div>
                                         <div>
@@ -788,7 +949,7 @@
                         </div>
                         <!-- Climax: Gala Show -->
                         <div
-                                class="relative z-10 w-full max-w-4xl glass-panel rounded-2xl overflow-hidden mt-8 shadow-[0_10px_40px_rgba(255,184,0,0.2)] border-sunset-amber/50">
+                                class="relative z-10 w-full max-w-4xl glass-panel rounded-2xl overflow-hidden mt-8 shadow-[0_10px_40px_rgba(255,184,0,0.2)] border-sunset-amber/50 gala-card group cursor-pointer">
                                 <div
                                         class="h-48 bg-gradient-to-r from-primary via-primary-container to-secondary-container relative">
                                         <div class="absolute inset-0 bg-black/20"></div>
@@ -802,7 +963,7 @@
                                                         <p class="font-body-md text-body-md text-white/90">Temple Đà
                                                                 Nẵng Resort</p>
                                                 </div>
-                                                <span class="material-symbols-outlined text-sunset-amber text-6xl drop-shadow-lg"
+                                                <span class="material-symbols-outlined text-sunset-amber text-6xl drop-shadow-lg icon-gala"
                                                         style="font-variation-settings: 'FILL' 1;">celebration</span>
                                         </div>
                                 </div>
@@ -811,22 +972,22 @@
                                                 <p class="font-body-lg text-body-lg text-on-surface mb-4">Khép lại hành trình bằng một đêm thật bùng nổ: bia luôn đầy ly, nhạc live hết cỡ và đại tiệc ánh sáng rực rỡ bên biển. Cùng nâng ly cho những chiến tích vừa chinh phục! 🍻</p>
                                                 <div class="flex gap-3">
                                                         <span
-                                                                class="px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
+                                                                class="gala-chip px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
                                                                         class="material-symbols-outlined text-sm">sports_bar</span>
                                                                 Beer</span>
                                                         <span
-                                                                class="px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
+                                                                class="gala-chip px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
                                                                         class="material-symbols-outlined text-sm">music_note</span>
                                                                 Music</span>
                                                         <span
-                                                                class="px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
+                                                                class="gala-chip px-3 py-1 bg-surface-container-high rounded-full font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1"><span
                                                                         class="material-symbols-outlined text-sm">lightbulb</span>
                                                                 Light Show</span>
                                                 </div>
                                         </div>
                                         <div
                                                 class="w-full md:w-1/3 aspect-video rounded-xl bg-surface-container-highest overflow-hidden relative">
-                                                <div class="bg-cover bg-center w-full h-full"
+                                                <div class="bg-cover bg-center w-full h-full transition-transform duration-700 ease-out group-hover:scale-110"
                                                         data-alt="A vibrant, high-energy beach party at night, illuminated by neon lights and a laser show, with a large crowd enjoying music and drinks under a starry sky. The scene is festive, colorful, and embodies a premium travel experience in Da Nang, capturing the 'thảnh thơi' vibe with glassmorphism UI elements floating subtly."
                                                         style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_wM20vL06ccSHiInywrewYZ45w9kVijap20qm-tGfUMBwLh1DrFK1uBToniqXPtQ5BEr1-CiG773hlxjNMRxmiweiT_6BPxc3zjwnP476KUD6bZyQELfp6xgjMGcp76Pt-0dLIcLYt3dmNPmbWjkNz50feS_uHg8_50EhYX9LKsCY9X7fVlcR6hj4H6Xr6KwQXX98ILZJyZQe7xEmezUbfI3Ohvu6i7hk6ggcB1rDWj3YLM9zpZakPw')">
                                                 </div>
@@ -1040,6 +1201,10 @@
                     if (targetId === 'day-1') {
                         updateTimeline();
                     }
+                    // TP: refresh Day 2 liquid line right after the tab becomes visible
+                    if (targetId === 'day-2') {
+                        requestAnimationFrame(updateLiquidProgress);
+                    }
                 });
             });
 
@@ -1124,6 +1289,46 @@
             document.fonts?.ready.then(measureTimeline);
 
             measureTimeline();
+
+            // ===== TP: Day 2 Central Liquid Line — scroll-linked progress =====
+            // Same playhead mechanic as Day 1: the colored line fills as you
+            // scroll down and recedes when you scroll back up.
+            const day2Container = document.querySelector('#day-2 .relative.w-full.flex.flex-col.items-center');
+            const liquidProgress = document.getElementById('liquid-progress');
+            let liquidTicking = false;
+
+            function updateLiquidProgress() {
+                liquidTicking = false;
+                if (!day2Container || !liquidProgress) return;
+
+                const containerRect = day2Container.getBoundingClientRect();
+                if (containerRect.height === 0) return; // Day 2 tab not visible
+
+                const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+                const atPageBottom = window.scrollY >= maxScrollY - 2;
+
+                // Playhead in the container's local coordinate system.
+                let playheadY = getTriggerOffset() - containerRect.top;
+                if (atPageBottom) playheadY = containerRect.height;
+                playheadY = Math.max(0, Math.min(containerRect.height, playheadY));
+
+                const ratio = playheadY / containerRect.height;
+                // Reveal the gradient top-down: bottom inset shrinks as we scroll.
+                liquidProgress.style.clipPath = `inset(0 0 ${(1 - ratio) * 100}% 0 round 9999px)`;
+            }
+
+            function requestLiquidUpdate() {
+                if (liquidTicking) return;
+                liquidTicking = true;
+                requestAnimationFrame(updateLiquidProgress);
+            }
+
+            if (day2Container && liquidProgress) {
+                window.addEventListener('scroll', requestLiquidUpdate, { passive: true });
+                window.addEventListener('resize', updateLiquidProgress);
+                window.addEventListener('orientationchange', updateLiquidProgress);
+                updateLiquidProgress();
+            }
         });
     </script>
     <script>
